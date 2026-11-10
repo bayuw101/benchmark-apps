@@ -1,0 +1,30 @@
+{
+  "name": "@btb/journeys",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "k6 journeys and the runner image (PRD E2.2). Build writes dist/main.js and dist/catalog.json.",
+  "exports": {
+    "./catalog": "./src/catalog.ts"
+  },
+  "scripts": {
+    "build": "tsx build.ts",
+    "image": "tsx build.ts && ./image.sh",
+    "typecheck": "tsc --noEmit",
+    "check": "tsc --noEmit && eslint",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@btb/contracts": "workspace:*",
+    "@btb/k6-lib": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/k6": "^1.2.0",
+    "@types/node": "^22",
+    "@typescript-eslint/parser": "^8.72.1",
+    "esbuild": "^0.25.0",
+    "eslint": "^9",
+    "tsx": "^4.20.0",
+    "typescript": "^5"
+  }
+}

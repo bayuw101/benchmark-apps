@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Performance Audit Platform System Flowchart</title>
+<style>
+:root{
+  --paper:#f3efe6; --card:#fffdf8; --ink:#1b2740; --muted:#5d6679; --rule:rgba(27,39,64,.16);
+  --safety:#d9481c; --ok:#2e7a4b; --data:#2d5fa8; --dec:#fff6df;
+  --display:"Avenir Next Condensed","Futura","Gill Sans",sans-serif;
+  --body:"Avenir Next","Gill Sans","Segoe UI",sans-serif;
+  --mono:"SF Mono","Menlo","Consolas",monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body)}
+body{
+  background-image:
+    linear-gradient(rgba(27,39,64,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(27,39,64,.045) 1px,transparent 1px);
+  background-size:24px 24px;
+  padding-bottom:64px;
+}
+header{padding:28px 32px 0;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--safety)}
+h1{font-family:var(--display);font-weight:600;font-size:44px;line-height:.95;letter-spacing:.01em;text-transform:uppercase;margin:8px 0 10px}
+.sub{max-width:760px;color:var(--muted);font-size:14.5px;line-height:1.5;margin:0}
+.titleblock{border:1.5px solid var(--ink);font-family:var(--mono);font-size:10.5px;display:grid;grid-template-columns:auto auto;min-width:300px;background:var(--card)}
+.titleblock div{padding:6px 10px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.titleblock div:nth-child(2n){border-right:0}
+.titleblock b{display:block;font-weight:500;color:var(--muted);font-size:9px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px}
+.bar{position:sticky;top:0;z-index:5;margin-top:22px;padding:10px 32px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;background:rgba(243,239,230,.94);backdrop-filter:blur(4px);border-top:1.5px solid var(--ink);border-bottom:1px solid var(--rule)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{font-family:var(--display);text-transform:uppercase;letter-spacing:.06em;font-size:15px;padding:7px 14px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.tab .n{font-family:var(--mono);font-size:10px;margin-right:6px;color:var(--safety)}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+.tab[aria-selected="true"] .n{color:#ffb08f}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:11.5px;color:var(--muted);align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.lg{display:inline-block;width:22px;height:12px;border:1.4px solid var(--ink);background:var(--card)}
+.lg.dec{width:14px;height:14px;transform:rotate(45deg) scale(.8);background:var(--dec)}
+.lg.fail{border-color:var(--safety);background:#fff2ea}
+.lg.data{border-color:var(--data);background:#eef3fb;border-radius:6px}
+.lg.ext{border-style:dashed;border-color:var(--muted)}
+.ln{display:inline-block;width:24px;border-top:2px solid var(--ink)}
+.ln.y{border-color:var(--ok)} .ln.n{border-color:var(--safety)} .ln.d{border-top:2px dashed var(--data)}
+.zoom{display:flex;gap:4px}
+.zoom button{font-family:var(--mono);font-size:12px;width:34px;height:30px;border:1px solid var(--ink);background:var(--card);cursor:pointer;color:var(--ink)}
+.zoom button.w{width:auto;padding:0 10px}
+main{padding:18px 32px 0}
+.dlbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 32px 0}
+.dll{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--safety);margin-right:4px}
+.dlbar button,.dlbar .btn{font-family:var(--mono);font-size:11.5px;padding:6px 11px;border:1px solid var(--ink);background:var(--card);color:var(--ink);cursor:pointer;text-decoration:none;line-height:1.2}
+.dlbar button:hover,.dlbar .btn:hover{background:var(--ink);color:var(--paper)}
+.dlnote{font-size:12px;color:var(--muted);margin-left:6px}
+.srcpanel{display:none;margin:10px 32px 0;border:1.5px solid var(--ink);background:var(--card);padding:12px 16px 14px}
+.srcpanel.open{display:block}
+.srcpanel ol{margin:0 0 10px;padding-left:18px;font-size:13px;line-height:1.6}
+.srcpanel code{font-family:var(--mono);font-size:12px}
+.srcrow{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.srcrow button{font-family:var(--mono);font-size:12px;padding:6px 14px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer}
+.srcmsg{font-size:12px;color:var(--ok)}
+.srcpanel textarea{width:100%;height:160px;font-family:var(--mono);font-size:11px;border:1px solid var(--rule);background:#fbf9f3;color:var(--ink);padding:8px;resize:vertical}
+.view{display:none}
+.view.on{display:block}
+.view h2{font-family:var(--display);text-transform:uppercase;font-weight:600;font-size:24px;letter-spacing:.03em;margin:4px 0 4px}
+.view p.cap{margin:0 0 14px;color:var(--muted);font-size:13.5px;max-width:900px;line-height:1.5}
+.canvas{overflow:auto;border:1.5px solid var(--ink);background:rgba(255,253,248,.55)}
+.canvas svg{display:block}
+svg text{font-family:var(--body)}
+.node{cursor:pointer}
+.node:hover .shape{stroke-width:2.4}
+.node.sel .shape{stroke-width:2.8;filter:drop-shadow(0 0 0 rgba(0,0,0,0))}
+.edge path{fill:none;stroke-width:1.6;transition:opacity .15s}
+.dim .edge:not(.hl) path{opacity:.18}
+.dim .elabel:not(.hl){opacity:.25}
+.dim .node:not(.hl){opacity:.4}
+.edge.hl path{stroke-width:2.6}
+.drawer{position:fixed;right:20px;top:120px;width:340px;max-height:calc(100vh - 200px);overflow:auto;background:var(--card);border:1.5px solid var(--ink);box-shadow:6px 6px 0 rgba(27,39,64,.12);padding:16px 18px 18px;z-index:10;transform:translateX(120%);transition:transform .22s ease}
+.drawer.open{transform:none}
+.drawer .x{position:absolute;right:10px;top:8px;border:0;background:none;font-size:20px;cursor:pointer;color:var(--muted)}
+.drawer .t{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--safety)}
+.drawer h3{font-family:var(--display);text-transform:uppercase;font-weight:600;font-size:21px;line-height:1.05;margin:6px 0 8px}
+.drawer .own{display:inline-block;font-family:var(--mono);font-size:10.5px;border:1px solid var(--ink);padding:2px 7px;margin-bottom:10px}
+.drawer p{font-size:13.5px;line-height:1.5;margin:0 0 12px}
+.drawer h4{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:12px 0 6px;font-weight:500}
+.drawer ul{margin:0;padding-left:16px;font-size:12.5px;line-height:1.55}
+.drawer li b{font-weight:600}
+.hint{font-family:var(--mono);font-size:11px;color:var(--muted);margin:10px 0 0}
+@media (max-width:900px){header{grid-template-columns:1fr}.titleblock{min-width:0}h1{font-size:34px}.drawer{left:12px;right:12px;width:auto;top:auto;bottom:70px}}
+@media print{
+  .bar,.dlbar,.srcpanel,.drawer,.hint{display:none!important}
+  .view{display:block!important;break-after:page}
+  .canvas{overflow:visible;border:1px solid var(--ink)}
+  .canvas svg{width:100%!important;height:auto!important}
+  body{padding-bottom:0}
+  @page{size:A3 portrait;margin:12mm}
+}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="kicker">Ticketing performance audit platform · system flowchart</div>
+    <h1>From run request<br>to game-day verdict</h1>
+    <p class="sub">The full system across three views: what happens to a single run, how the parts connect, and how every run can be stopped safely. Click any box for details, who owns it, and its connections.</p>
+  </div>
+  <div class="titleblock">
+    <div><b>Drawing</b>PA-FLOW-01</div><div><b>Revision</b>H · Next.js + worker</div>
+    <div><b>Team</b>2 devs + DevOps</div><div><b>Date</b>5 Nov 2026</div>
+    <div><b>Engine</b>k6 Operator · k6</div><div><b>Sheets</b>3</div>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-view="life" aria-selected="true"><span class="n">01</span>Run lifecycle</button>
+    <button class="tab" role="tab" data-view="arch" aria-selected="false"><span class="n">02</span>Architecture</button>
+    <button class="tab" role="tab" data-view="safe" aria-selected="false"><span class="n">03</span>Safety &amp; abort</button>
+  </div>
+  <div class="legend">
+    <span><i class="lg"></i>Step</span>
+    <span><i class="lg dec"></i>Decision</span>
+    <span><i class="lg fail"></i>Stop / reject</span>
+    <span><i class="lg data"></i>Data store</span>
+    <span><i class="lg ext"></i>External</span>
+    <span><i class="ln"></i>Flow</span>
+    <span><i class="ln y"></i>Yes</span>
+    <span><i class="ln n"></i>No / abort</span>
+    <span><i class="ln d"></i>Data</span>
+  </div>
+  <div class="zoom">
+    <button data-z="-" title="Zoom out">−</button>
+    <button class="w" data-z="fit" title="Fit width">Fit</button>
+    <button data-z="+" title="Zoom in">+</button>
+  </div>
+</div>
+<div class="dlbar">
+  <span class="dll">Download</span>
+  <button data-dl="png" title="High-resolution image of the sheet you're viewing">PNG · this sheet</button>
+  <button data-dl="svg" title="Vector file of the sheet you're viewing; opens in Figma, Visio, browsers">SVG · this sheet</button>
+  <button data-dl="all" title="Three PNG files, one per sheet">PNG · all 3 sheets</button>
+  <button data-dl="html" title="One self-contained file with all sheets and click-for-details">Interactive HTML</button>
+  <button data-dl="zip" title="The interactive HTML plus a short README, zipped">Interactive HTML · ZIP</button>
+  <button data-dl="pdf" title="Choose Save as PDF in the print dialog; one sheet per A3 page">PDF · print</button>
+</div>
+
+<main>
+  <section class="view on" id="view-life">
+    <h2>01 · Run lifecycle</h2>
+    <p class="cap">One run, from the engineer's form to the final report. A run is checked three times before load starts: by the API at creation, again at Start (with a preflight check), and by each runner pod just before k6 launches. The Next.js route handlers record and check the run; a separate worker process creates the k6 Operator TestRun in Kubernetes, and the operator starts one runner pod per load segment. Results come back through the TestRun status, signed callbacks and the metrics store. Pods never write to the database directly.</p>
+    <div class="canvas"><svg id="svg-life"></svg></div>
+  </section>
+  <section class="view" id="view-arch">
+    <h2>02 · Architecture</h2>
+    <p class="cap">How the parts connect. One Next.js app serves both the dashboard and the API (route handlers); a separate Node worker runs background jobs. Both share packages/core and live in one monorepo with the runner image. Load runs on Kubernetes through the k6 Operator, on a dedicated, autoscaled node pool. The cluster, data stores and Grafana OSS are run by DevOps and managed through GitOps (Argo CD). Images are built by Bitbucket Pipelines. Our dashboard runs tests and shows live and summary charts; Grafana OSS handles deep-dive analysis. Lane headers show the owner.</p>
+    <div class="canvas"><svg id="svg-arch"></svg></div>
+  </section>
+  <section class="view" id="view-safe">
+    <h2>03 · Safety &amp; abort</h2>
+    <p class="cap">Four independent ways a run stops: an engineer's emergency stop (deletes the TestRun), an expired lease, missing health or telemetry data (fail closed), and k6's own threshold abort. Underneath them, Kubernetes enforces two limits the app can't override: NetworkPolicy allows traffic only to approved targets, and ResourceQuota caps total load. The lease path works even if the dashboard and API are both down.</p>
+    <div class="canvas"><svg id="svg-safe"></svg></div>
+  </section>
+  <p class="hint">Hover a box to trace its connections · click for details · use Fit / ± to zoom</p>
+</main>
+
+<aside class="drawer" id="drawer" aria-live="polite">
+  <button class="x" id="dx" aria-label="Close">×</button>
+  <div id="dbody"></div>
+</aside>
+
+<script>
+// Diagram specs. Nodes sit on a lane (column) × row grid; edges route orthogonally.
+// Node types: start, end, proc, dec, fail, data, ext. Edge kinds: f flow, y yes, n no/abort, d data.
+window.SPECS = {
+  life: {
+    lanes: [
+      ["Engineer / QA", "apps/web · Next.js"],
+      ["Next.js API", "route handlers · apps/web"],
+      ["Approvers", "SRE · ticketing owner"],
+      ["Worker", "apps/worker · Node + BullMQ"],
+      ["Kubernetes", "k6 Operator · DevOps"],
+      ["Runner pods", "agent wrapper + k6"],
+      ["Metrics", "DevOps"]
+    ],
+    nodes: [
+      {id:"L1", lane:0,row:0,  t:"start", l:"New run", own:"Engineer / QA", d:"An engineer or QA opens the New Run form in the dashboard. Signed in through Microsoft Entra ID SSO."},
+      {id:"L2", lane:0,row:1,  t:"proc", l:"Configure run\ntarget · journey · profile", own:"Ahwalian (web)", d:"Pick the target environment, the journey (browse-event, checkout, receive-poll, scan-ticket) and a load preset (smoke, baseline, peak, spike, soak, stress). Preset sizes are relative to the target's reference peak, while absolute VU/RPS ceilings stay in policy. Browser steps can use the Stadium 4G or Wi-Fi baseline preset. An optional Release ID can be added. The form validates against the shared zod manifest schema before submit."},
+      {id:"L3", lane:1,row:2,  t:"proc", l:"Verify Entra token\nrole guard", own:"Ahwalian (lead)", d:"A withAuth wrapper on the route handler checks the Entra session (Auth.js), then confirms the user's role may create runs for this project and environment. Roles (viewer, engineer, approver, admin) are stored in Postgres, not read from Entra groups. Permissions are checked in every handler, never in middleware alone."},
+      {id:"L4", lane:1,row:3,  t:"dec", l:"Schema + policy\nvalid?", own:"Ahwalian (lead)", d:"The handler parses the manifest with the same zod schema the UI used, then calls the policy code in packages/core: target allowlist, VU/RPS ceilings, maximum duration and ramp rate. Soak and stress are rejected on prod-like targets, and a run without thresholds and abortOnFail is rejected too."},
+      {id:"L5", lane:0,row:3,  t:"fail", l:"Show violations\n(422)", own:"Ahwalian (web)", d:"Each failed rule is returned and shown next to the field that broke it. The user fixes the run plan and resubmits."},
+      {id:"L6", lane:1,row:4,  t:"proc", l:"Store manifest\n+ SHA-256 hash", db:true, own:"Ahwalian (lead)", d:"The manifest is saved to Postgres with its SHA-256 hash. The hash is what approvals are tied to. A created event is written to the append-only audit log."},
+      {id:"L7", lane:1,row:5,  t:"dec", l:"Approval\nneeded?", own:"Ahwalian (lead)", d:"Staging smoke, baseline and peak runs within the ceilings are auto-approved, and the rule that applied is written to the audit log. Spike, stress and soak runs need 1 approver. Every prod-like run needs 2 approvers."},
+      {id:"L8", lane:2,row:5,  t:"proc", l:"Review hash-bound\nmanifest", own:"Approvers", d:"Approvers see the exact manifest and its hash, plus the policy check results. An approval expires (default 24 hours, proposed) and only covers the approved time window."},
+      {id:"L9", lane:2,row:6,  t:"dec", l:"Required approvers,\nnot starter, same hash?", own:"Ahwalian (lead)", d:"Staging spike, stress and soak runs need 1 approver with the approver role. Prod-like runs need 2 different approvers (SRE and ticketing owner, names to be confirmed). The starter can never approve. Approvals only count for the hash they were given, and any edit changes the hash and voids them."},
+      {id:"L10",lane:2,row:7,  t:"fail", l:"Rejected or\nre-approval needed", own:"Approvers", d:"The run stays blocked. If the manifest was edited, it goes back for approval under the new hash."},
+      {id:"L11",lane:1,row:7,  t:"proc", l:"Status: ready", db:true, own:"Ahwalian (lead)", d:"The run is ready to start. The Start button is enabled for authorized users."},
+      {id:"L12",lane:0,row:8,  t:"proc", l:"Click Start run", own:"Engineer / QA", d:"The user starts the run. Nightly scheduled baselines are Phase 2. For now a baseline is a finished run that someone pins with Set as baseline."},
+      {id:"L13",lane:1,row:9,  t:"proc", l:"Re-check policy +\napprovals → queued", db:true, own:"Ahwalian + Bayu", d:"Policy and approvals are checked again at start time, since limits, the manifest or the approval window may have changed. Status becomes queued."},
+      {id:"L30",lane:3,row:10, t:"dec", l:"Preflight OK +\nslot free?", own:"Bayu", d:"Before anything is created, the worker checks: valid approval, permitted target, inside the approved window, test-data pool ready, target health endpoint OK, monitoring available and runner capacity. Limits are 1 active run per target and 2 per namespace. Runs that only wait for a slot stay queued in BullMQ."},
+      {id:"L31",lane:1,row:10, t:"fail", l:"Start blocked\nfailed check named", own:"Ahwalian (web)", d:"The run stays ready and the screen names the check that failed, for example the target health endpoint is down. A run that only waits for a free slot stays queued and starts by itself when the slot frees up."},
+      {id:"L32",lane:3,row:11, t:"proc", l:"Seed test data\nidentities per pod", own:"Bayu", d:"The worker runs the pre-run seed hook of the target (a named HTTP or SQL hook, result written to the audit log) and splits the test-identity pool across pods so no identity is used twice. If seeding fails, the run does not start."},
+      {id:"L14",lane:3,row:12, t:"proc", l:"CreateTestRun job\nK8s API · perf namespace", own:"Bayu", d:"The worker picks up the job and creates a k6 Operator TestRun resource in perf-staging (perf-prod only for the pre-launch pilot) using @kubernetes/client-node, with retries. It sets parallelism, the runner image, the script and the run ID. The app's service account can only create, read and delete TestRuns in those namespaces."},
+      {id:"L15",lane:4,row:13, t:"proc", l:"k6 Operator starts\nN runner pods (segments)", own:"DevOps", d:"The operator splits the test into execution segments and schedules one pod per segment on the dedicated load node pool. The node autoscaler adds nodes if needed. ResourceQuota rejects pods beyond the namespace cap, and NetworkPolicy limits traffic to allowlisted targets. External Secrets injects test accounts and payment sandbox keys."},
+      {id:"L16",lane:5,row:14, t:"dec", l:"Pod: hash, approvals\n+ lease OK?", own:"Bayu", d:"Before k6 starts, each pod's wrapper fetches the manifest with a short-lived token, recomputes the hash, checks approvals and takes a lease from the API. Even with a bug in the UI or API, an unapproved run can't send load."},
+      {id:"L17",lane:4,row:15, t:"fail", l:"Pods exit\nno load sent", own:"Bayu", d:"The pods exit with a refusal reason. The TestRun ends as failed and the reason is reported."},
+      {id:"L18",lane:5,row:15, t:"proc", l:"Start k6 segment i/N\n--tag testid", own:"Bayu", d:"The wrapper starts k6 for its segment, with --tag testid=<run_id> and native-histogram remote write. The operator coordinates the start so all segments begin together."},
+      {id:"L19",lane:5,row:16, t:"proc", l:"k6 drives load on\nticketing target", own:"Bayu", d:"k6 runs the journey against staging (a prod-like environment only for the pre-launch pilot): event pages in k6 browser, cart, checkout with the payment sandbox, ticket polling and the scan API. The journeys emit counters for orders, seats, tickets and charges that feed the integrity check."},
+      {id:"L20",lane:6,row:16, t:"data", l:"Prometheus\nnative histograms", own:"DevOps", d:"k6 remote-writes metrics as native histograms so p95/p99 merge correctly across runner pods. Every series carries the testid tag. Prometheus needs remote-write receiving and native histograms enabled."},
+      {id:"L21",lane:5,row:17, t:"dec", l:"Lease OK, target\nhealthy, thresholds OK?", own:"Bayu", d:"Checked continuously: the lease is renewed, the target health endpoint answers, runner telemetry is present, and k6 thresholds haven't failed. Any 'no' stops the run (see sheet 03)."},
+      {id:"L22",lane:3,row:17, t:"proc", l:"Live loop: query_range\nevery 5s → Redis", own:"Bayu", d:"In the worker: one query loop per active run calls /api/v1/query_range filtered by testid and publishes the result to Redis. A streaming route handler in Next.js forwards it to every viewer over Server-Sent Events. 20 viewers, or several web replicas, still means one loop."},
+      {id:"L23",lane:0,row:17, t:"proc", l:"Live charts\nVUs · RPS · p95 · errors", own:"Ahwalian (web)", d:"Recharts/ECharts time series with threshold lines. An emergency stop button is always visible during a run."},
+      {id:"L24",lane:5,row:18, t:"proc", l:"Test ends\nor k6 stopped", own:"Bayu", d:"k6 finishes the profile or is stopped. The wrapper posts a signed result callback (exit code, threshold results, artifact locations), uploads artifacts to S3 and releases the lease."},
+      {id:"L25",lane:4,row:19, t:"proc", l:"TestRun ends\nfinished / failed", own:"DevOps + Bayu", d:"The worker watches the TestRun status through the Kubernetes watch API. Together with the pods' signed callbacks, this gives two independent signals that the run has ended. The operator cleans up the runner pods."},
+      {id:"L33",lane:3,row:19, t:"proc", l:"Cleanup hook\nruns even if aborted", own:"Bayu", d:"After the TestRun ends (finished, failed or aborted) the worker runs the post-run cleanup hook to reset test data. The result is written to the audit log."},
+      {id:"L26",lane:1,row:20, t:"proc", l:"Update run status\n+ audit log", db:true, own:"Ahwalian + Bayu", d:"The run is marked finished or aborted, with a structured abort reason when it was stopped. Callback signatures are verified, duplicate callbacks are ignored, and a TestRun that ends without callbacks is flagged for review."},
+      {id:"L27",lane:3,row:21, t:"proc", l:"Summary + integrity\np50/p95/p99 → Postgres\nHTML report → S3", own:"Bayu + Ahwalian", d:"Queries final percentiles, error rate, peak RPS, max VUs and intended vs achieved load, then stores a summary and verdict in Postgres so results outlive metrics retention. When a read-only data source exists, the integrity check counts oversold seats, double charges and charged-but-no-ticket orders. Otherwise the verdict says integrity not verified. Builds the self-contained HTML report (PDF through browser print) and saves it to S3."},
+      {id:"L28",lane:0,row:22, t:"end", l:"View report\ncompare baseline", own:"Ahwalian (web)", d:"Pass/fail verdict with caveats, the integrity counts, and a comparison with the baseline that was pinned, all in our own dashboard (the release trend chart is a cut-line item). Screenshots and artifacts come from S3. A link opens the run's logs in CloudWatch, and one click opens Grafana filtered to the run."},
+      {id:"L29",lane:6,row:22, t:"ext", l:"Grafana OSS deep dive\nfiltered by testid", own:"DevOps", d:"Self-hosted Grafana OSS with the same Entra SSO. Opens the k6 dashboards filtered by testid and the run's time range: per-endpoint breakdowns, tag filters, load-generator health, heatmaps, and two runs side by side."}
+    ],
+    edges: [
+      {f:"L1",t:"L2"},
+      {f:"L2",t:"L3",l:"submit manifest"},
+      {f:"L3",t:"L4"},
+      {f:"L4",t:"L5",k:"n",l:"No"},
+      {f:"L5",t:"L2",k:"n",l:"fix & resubmit"},
+      {f:"L4",t:"L6",k:"y",l:"Yes"},
+      {f:"L6",t:"L7"},
+      {f:"L7",t:"L8",k:"y",l:"Yes"},
+      {f:"L8",t:"L9"},
+      {f:"L9",t:"L10",k:"n",l:"No"},
+      {f:"L9",t:"L11",k:"y",l:"Yes"},
+      {f:"L7",t:"L11",k:"n",l:"No",lt:.22},
+      {f:"L11",t:"L12",l:"Start enabled"},
+      {f:"L12",t:"L13",l:"POST /start"},
+      {f:"L13",t:"L30",l:"enqueue"},
+      {f:"L30",t:"L31",k:"n",l:"No"},
+      {f:"L30",t:"L32",k:"y",l:"Yes"},
+      {f:"L32",t:"L14",l:"seeded"},
+      {f:"L14",t:"L15",l:"create TestRun"},
+      {f:"L15",t:"L16",l:"pods scheduled"},
+      {f:"L16",t:"L17",k:"n",l:"No"},
+      {f:"L16",t:"L18",k:"y",l:"Yes"},
+      {f:"L18",t:"L19"},
+      {f:"L19",t:"L20",k:"d",l:"remote write"},
+      {f:"L19",t:"L21"},
+      {f:"L21",t:"L19",k:"y",r:"loopL",l:"Yes · continue"},
+      {f:"L21",t:"L24",k:"n",l:"No / done"},
+      {f:"L20",t:"L22",k:"d",r:"gap",g:16.5,l:"query_range"},
+      {f:"L22",t:"L23",k:"d",l:"SSE via route handler"},
+      {f:"L24",t:"L25",l:"pods complete"},
+      {f:"L17",t:"L25",k:"n",l:"failed"},
+      {f:"L25",t:"L33"},
+      {f:"L33",t:"L26",l:"watch + callbacks"},
+      {f:"L26",t:"L27",l:"enqueue"},
+      {f:"L20",t:"L27",k:"d",r:"gap",g:20.5,l:"final metrics"},
+      {f:"L27",t:"L28",l:"report ready"},
+      {f:"L28",t:"L29",k:"d",l:"Open in Grafana"}
+    ]
+  },
+
+  arch: {
+    lanes: [
+      ["People", "users + identity"],
+      ["Frontend", "apps/web · Ahwalian"],
+      ["Backend", "API · Ahwalian, worker · Bayu"],
+      ["Data stores", "DevOps"],
+      ["Execution", "Kubernetes · DevOps + Bayu"],
+      ["External", "targets + observability"]
+    ],
+    nodes: [
+      {id:"A1", lane:0,row:0,t:"ext", l:"Engineers / QA", own:"Users", d:"Create, start, watch and stop runs. Read reports."},
+      {id:"A2", lane:0,row:2,t:"ext", l:"Approvers\nSRE · ticketing owner", own:"Users", d:"Approve staging spike, stress and soak runs (1 approver) and every prod-like run (2 approvers). Approvers must be different people from whoever started the run. The names of the SRE and the ticketing owner are still to be confirmed."},
+      {id:"A3", lane:0,row:4,t:"ext", l:"Microsoft Entra ID\n(SSO)", own:"IT", d:"Company sign-in for the dashboard and Grafana OSS. Roles (viewer, engineer, approver, admin) are stored in Postgres and assigned by an admin, not read from Entra groups."},
+      {id:"A4", lane:1,row:1,t:"proc", l:"Next.js dashboard\nruns · approvals\nlive charts · reports", own:"Ahwalian", d:"Run control plus the charts that matter every run: live VUs, RPS, p95/p99 and errors with an emergency stop; the verdict, integrity counts and baseline comparison (the release trend chart is a cut-line item). Deep dives link out to Grafana OSS and run logs link out to CloudWatch. Server components for first load, client components for live charts (EventSource), TanStack Query for history. Auth.js handles Entra sign-in. The dashboard hides buttons but never decides permissions."},
+      {id:"A5", lane:2,row:1,t:"proc", l:"Route handlers\n(same Next.js app)\nauth · policy · stop", own:"Ahwalian (lead)", d:"app/api/**/route.ts inside the same Next.js app as the dashboard, so there's no separate API project. Every handler goes through withAuth (role check) and zod parsing, then calls packages/core: manifests and hashing, policy (including mandatory thresholds), approvals, lease renewal, signed pod callbacks, emergency stop (deletes the TestRun), and approved PromQL query templates for our charts. Audit events are written in the same transaction as the change. No business logic lives in route files."},
+      {id:"A6", lane:2,row:3,t:"proc", l:"Worker (Node + BullMQ)\nTestRun · watch · summary", own:"Bayu", d:"apps/worker: a separate, always-running Node + TypeScript process with no web framework. It runs preflight and the run queue (1 active run per target, 2 per namespace), runs the seed and cleanup hooks, creates TestRuns through an Executor interface (Kubernetes for staging and prod-like, Docker or plain local for developers only), watches their status through the Kubernetes watch API, probes the target health endpoint every 10 seconds during a run, builds end-of-run summaries, the integrity check and the HTML report, and cleans up stuck runs. Nightly baselines are Phase 2. Uses the same packages/core as the route handlers. Deployed separately (1–2 replicas) and shuts down cleanly on SIGTERM."},
+      {id:"A7", lane:2,row:5,t:"proc", l:"Live-metrics loop\n(worker) → Redis → SSE", own:"Bayu", d:"Runs in the worker: one Prometheus query loop per active run, published to Redis. A streaming route handler forwards updates to every viewer over Server-Sent Events, so several web replicas still share one loop."},
+      {id:"A8", lane:3,row:0,t:"data", l:"PostgreSQL\nruns · approvals · audit", own:"DevOps", d:"Projects, targets, manifests + hashes, runs, approvals, run summaries, baselines and the audit log. The audit log is append-only (the app role can only insert and read) and kept for 1 year. Prisma or Drizzle."},
+      {id:"A9", lane:3,row:3,t:"data", l:"Redis\nqueues · live updates", own:"DevOps", d:"Queue storage for BullMQ, and the channel the worker uses to publish live metric updates to the web app. No test data or secrets."},
+      {id:"A10",lane:3,row:5,t:"data", l:"S3 storage\nreports · artifacts", own:"DevOps", d:"HTML reports, k6 summary JSON, screenshots and browser errors, in a new AWS bucket (MinIO for local development). Raw artifacts are kept 90 days. Report retention is still to be decided (proposed 1 year). Linked from the run page."},
+      {id:"A11",lane:3,row:7,t:"data", l:"Prometheus\nk6 + pod metrics", own:"DevOps", d:"Plain Prometheus (not VictoriaMetrics), so Grafana's official k6 native-histogram dashboard works without changes. Stores k6 metrics (native histograms, testid tag) plus runner-pod CPU and memory. Needs remote-write receiving and native histograms enabled, and 90 days retention; Postgres summaries cover older runs. Read by our query templates and by Grafana OSS."},
+      {id:"A12",lane:4,row:1,t:"proc", l:"k6 Operator\nTestRun → runner pods", own:"DevOps", d:"Runs in the cluster. Turns each TestRun into N runner pods (one per execution segment) on a dedicated, autoscaled load node pool. Namespaces perf-staging / perf-prod each have a NetworkPolicy egress allowlist and a ResourceQuota cap. Managed through GitOps (Argo CD)."},
+      {id:"A13",lane:4,row:3,t:"proc", l:"Runner pod: wrapper\nhash · lease · callbacks", own:"Bayu", d:"The container image's entrypoint is the agent wrapper. It checks the manifest hash and approvals, takes and renews the lease, starts k6 for its segment, and stops k6 through its local REST API (or kills it) when the lease expires or the reply is STOP."},
+      {id:"A14",lane:4,row:5,t:"proc", l:"k6 · k6 browser\nrunner pods", own:"Bayu", d:"Protocol load (k6) and browser users during load (k6 browser, with Chromium in the runner image and a small cap per pod measured in the spike) run in runner pods. Lighthouse audits are Phase 2. Scripts come from journeys/ and packages/k6-lib, mounted as a ConfigMap or baked into the image. Pod logs are labeled with the run ID and shipped to CloudWatch."},
+      {id:"A15",lane:5,row:5,t:"ext", l:"Ticketing platform\nstaging (prod-like later)", own:"Ticketing owner", d:"The system under test: event pages, cart, checkout, ticket delivery, gate scanning APIs. All runs target staging for now. A prod-like environment is only needed for the pre-launch pilot."},
+      {id:"A16",lane:5,row:7,t:"ext", l:"Grafana OSS\nk6 deep-dive dashboards", own:"DevOps", d:"Self-hosted Grafana OSS (AGPLv3, free to run internally). Sign-in through the same Entra ID SSO. Dashboards are provisioned as code through GitOps: k6 native-histogram dashboards plus a runner-pod health board. Opened from the run page with testid and time filters; not embedded."},
+      {id:"A17",lane:5,row:1,t:"ext", l:"Vault + External\nSecrets Operator", own:"DevOps", d:"Test accounts, payment sandbox keys and callback signing keys live in the vault. External Secrets Operator syncs them into the perf namespaces as Kubernetes Secrets. Never stored in manifests or the repo."},
+      {id:"A19",lane:5,row:0,t:"ext", l:"Bitbucket Pipelines\nbuild · test · push", own:"Lead + DevOps", d:"CI for the monorepo. On pull requests it tests only the affected apps and runs the automated checks (auth wrapper coverage, policy and approval tests, the lint rule against logging secrets). It builds the web, worker and runner images from the same commit, pushes them to the image registry (ECR proposed, to be confirmed with DevOps), and updates the GitOps repo so Argo CD deploys them. Load test runs never go through CI."},
+      {id:"A20",lane:5,row:2,t:"ext", l:"Staging DB\nread-only (integrity)", own:"Ticketing owner", d:"Read-only access to the staging database (orders, seats, payments, tickets) used by the integrity check. Access is still to be confirmed with the ticketing team. Without it, the verdict says integrity not verified."},
+      {id:"A21",lane:5,row:6,t:"ext", l:"CloudWatch Logs\nlabel run_id · 90 days", own:"DevOps", d:"Existing CloudWatch. Fluent Bit ships runner pod logs, labeled with the run ID, with 90-day retention. The run page links to a filtered Logs Insights query, so engineers and approvers need read access to the perf log group. Abort reasons never depend on it: stop and abort events reach the audit log in Postgres through a signed callback."},
+      {id:"A18",lane:5,row:3,t:"ext", l:"Payment sandbox\n(rate limit checked)", own:"Ticketing owner", d:"The payment provider's sandbox. Its rate limit is verified in the spike. Receive is measured by polling the API, so there is no email or SMS sink in the MVP."}
+    ],
+    edges: [
+      {f:"A1",t:"A4",l:"plan · run · watch"},
+      {f:"A2",t:"A4",pts:"A2A4",l:"approve"},
+      {f:"A4",t:"A3",pts:"A4A3",l:"SSO"},
+      {f:"A4",t:"A5",l:"same app"},
+      {f:"A5",t:"A8",k:"d",r:"gap",g:.5,l:"SQL"},
+      {f:"A5",t:"A6",l:"enqueue"},
+      {f:"A6",t:"A9",k:"d",l:"jobs"},
+      {f:"A6",t:"A10",k:"d",pts:"A6A10",l:"reports"},
+      {f:"A5",t:"A12",l:"K8s API: create · watch · delete"},
+      {f:"A12",t:"A17",k:"d",l:"secrets"},
+      {f:"A12",t:"A13",l:"spawn N pods"},
+      {f:"A13",t:"A5",pts:"A13A5",l:"lease · callbacks"},
+      {f:"A13",t:"A14",l:"launch · stop"},
+      {f:"A14",t:"A10",k:"d",l:"artifacts"},
+      {f:"A14",t:"A15",l:"load"},
+      {f:"A15",t:"A18",l:"sandbox calls"},
+      {f:"A14",t:"A11",k:"d",pts:"A14A11",l:"remote write"},
+      {f:"A7",t:"A11",k:"d",r:"vh",l:"query_range"},
+      {f:"A7",t:"A4",k:"d",pts:"A7A4",l:"SSE"},
+      {f:"A11",t:"A16",k:"d",l:"datasource"},
+      {f:"A19",t:"A12",l:"GitOps deploy"},
+      {f:"A6",t:"A20",k:"d",pts:"A6A20",l:"read-only SQL",lt:.8},
+      {f:"A14",t:"A21",k:"d",pts:"A14A21",l:"pod logs"}
+    ]
+  },
+
+  safe: {
+    lanes: [
+      ["Engineer / Approver", "apps/web"],
+      ["Next.js API", "route handlers + worker"],
+      ["Kubernetes", "k6 Operator · guardrails"],
+      ["Runner pod wrapper", "apps/agent"],
+      ["k6 process", "load engine"],
+      ["Target + telemetry", "worker probe · DevOps"]
+    ],
+    nodes: [
+      {id:"S1", lane:0,row:0,t:"start",l:"Emergency stop", own:"Engineer / Approver", d:"Always visible on the run page while a run is active."},
+      {id:"S2", lane:1,row:1,t:"dec",  l:"Authorized?\nwithAuth check", own:"Ahwalian (lead)", d:"The stop route handler's withAuth wrapper checks the role: the creator, approvers and admins can stop a run. Stopping is never blocked by approval rules."},
+      {id:"S3", lane:0,row:1,t:"fail", l:"Denied\n(403)", own:"Ahwalian", d:"Shown to users without stop permission, with who to contact."},
+      {id:"S4", lane:1,row:2,t:"proc", l:"Mark run stopping\n+ audit log", db:true, own:"Ahwalian (lead)", d:"Status becomes stopping, and the API stops renewing the run's lease (renewals reply STOP). That means the pods stop on their own even if deleting the TestRun fails. The stop is written to the audit log with the user."},
+      {id:"S5", lane:2,row:3,t:"proc", l:"Delete TestRun\nvia Kubernetes API", own:"Bayu", d:"Deleting the TestRun makes Kubernetes terminate every runner pod for the run. Pods get SIGTERM, then a hard kill after the grace period."},
+      {id:"S18",lane:2,row:0,t:"ext", l:"NetworkPolicy\negress allowlist", own:"DevOps", d:"Always on, independent of the app. Runner pods can only reach approved target hosts, the API and the metrics store. A wrong URL in a script is blocked at the network level."},
+      {id:"S19",lane:2,row:1,t:"ext", l:"ResourceQuota\npods · CPU · memory cap", own:"DevOps", d:"Always on, independent of the app. Caps how many runner pods, and how much CPU and memory, a namespace can use, so total load can't exceed the cap even if the app has a bug. perf-prod gets a much lower cap than perf-staging."},
+      {id:"S7", lane:3,row:0,t:"proc", l:"Renew lease\nwith API every 10s", own:"Bayu", d:"Lease length and renewal interval are set in policy. Suggested: 30s lease, renewed every 10s. The final values are still to be decided from the spike."},
+      {id:"S8", lane:3,row:1,t:"dec",  l:"Renewed before\nexpiry?", own:"Bayu", d:"If the API is down, unreachable, or has stopped renewing because the run is stopping, the lease expires and the wrapper stops k6. This path needs no dashboard or API."},
+      {id:"S10",lane:5,row:0,t:"proc", l:"Health probe +\ntelemetry check", own:"Bayu + DevOps", d:"The worker probes the target's health endpoint every 10 seconds, and 3 failures in a row count as unhealthy. DevOps keeps the metrics stream available so its presence can be checked. Metrics from inside the target (APM, database) are Phase 2."},
+      {id:"S11",lane:5,row:1,t:"dec",  l:"Target healthy,\ntelemetry present?", own:"Bayu + DevOps", d:"Fail closed: if the health probe fails 3 times in a row, or the telemetry goes missing, the run is treated as unsafe and stopped."},
+      {id:"S13",lane:4,row:2,t:"proc", l:"k6 threshold breach\nabortOnFail", own:"Bayu", d:"Thresholds in the script (error rate and p95 over budget) use abortOnFail so k6 stops itself. They are mandatory on every run, and policy rejects a run without them."},
+      {id:"S6", lane:3,row:4,t:"fail", l:"Wrapper stops k6\nREST API, else kill", own:"Bayu", d:"Graceful stop through k6's local REST API. If k6 doesn't exit within a few seconds, the wrapper kills the process."},
+      {id:"S14",lane:4,row:5,t:"fail", l:"k6 stopped\nload ends", own:"Bayu", d:"Load stops within seconds. Partial metrics are already in the metrics store."},
+      {id:"S15",lane:2,row:6,t:"proc", l:"TestRun ended\n+ signed callback", own:"Bayu", d:"The worker sees the TestRun end through the Kubernetes watch API. The wrapper's signed callback reports which stop path fired and the last threshold values, and is written to the audit log."},
+      {id:"S16",lane:1,row:7,t:"proc", l:"Status aborted\npartial report", db:true, own:"Ahwalian + Bayu", d:"The run is marked aborted with a structured reason (emergency stop, lease expired, threshold, target health, telemetry lost, policy breach or Kubernetes failure). The cleanup hook still runs, and a summary and partial report are still generated."},
+      {id:"S17",lane:0,row:8,t:"end",  l:"Dashboard shows\nabort reason", own:"Ahwalian", d:"The run page shows why the run stopped, when, and who or what triggered it."}
+    ],
+    edges: [
+      {f:"S1",t:"S2"},
+      {f:"S2",t:"S3",k:"n",l:"No"},
+      {f:"S2",t:"S4",k:"y",l:"Yes"},
+      {f:"S4",t:"S5",l:"delete"},
+      {f:"S5",t:"S6",l:"pod SIGTERM"},
+      {f:"S18",t:"S19",l:"+ always on"},
+      {f:"S7",t:"S8"},
+      {f:"S8",t:"S7",k:"y",r:"loopR",l:"Yes"},
+      {f:"S8",t:"S6",k:"n",l:"No · lease expired",lt:.35},
+      {f:"S10",t:"S11"},
+      {f:"S11",t:"S10",k:"y",r:"loopR",l:"Yes"},
+      {f:"S11",t:"S6",k:"n",r:"gap",g:3.5,l:"No · fail closed"},
+      {f:"S6",t:"S14",k:"n",l:"stop"},
+      {f:"S13",t:"S14",k:"n",l:"k6 exits"},
+      {f:"S14",t:"S15",l:"exit status"},
+      {f:"S15",t:"S16",l:"watch + callback"},
+      {f:"S16",t:"S17",l:"notify"}
+    ]
+  }
+};
+
+// Hand-routed edges for the architecture view (P = geometry helpers from app.js).
+window.ROUTES = {
+  A2A4: (P,s,t) => [P.port(s,"right"), [P.lx(1), P.cy(s)], [P.lx(1), P.cy(t)], P.port(t,"left")],
+  A4A3: (P,s,t) => [P.port(s,"bottom",-40), [P.cx(s)-40, P.cy(t)], P.port(t,"right")],
+  A6A10:(P,s,t) => [P.port(s,"bottom",40), [P.cx(s)+40, P.ry(4)], [P.cx(t), P.ry(4)], P.port(t,"top")],
+  A13A5:(P,s,t) => [P.port(s,"left"), [P.lx(4), P.cy(s)], [P.lx(4), P.ry(2)], [P.cx(t)+40, P.ry(2)], P.port(t,"bottom",40)],
+  A14A11:(P,s,t)=> [P.port(s,"bottom"), [P.cx(s), P.ry(6)], [P.cx(t)+40, P.ry(6)], P.port(t,"top",40)],
+  A7A4: (P,s,t) => [P.port(s,"left"), [P.cx(t)+40, P.cy(s)], P.port(t,"bottom",40)],
+  A6A20:(P,s,t) => [P.port(s,"top",40), [P.cx(s)+40, P.ry(2.5)], [P.cx(t), P.ry(2.5)], P.port(t,"bottom")],
+  A14A21:(P,s,t)=> [P.port(s,"bottom",40), [P.cx(s)+40, P.ry(6)], P.port(t,"left")]
+};
+
+</script>
+<script>
+(function(){
+const LW=210, ROWH=96, PADL=30, PADR=46, TOP=82, PADB=36;
+const NS="http://www.w3.org/2000/svg";
+const COLORS={f:"#1b2740", y:"#2e7a4b", n:"#d9481c", d:"#2d5fa8"};
+const SIZE={dec:[192,84], start:[150,46], end:[164,50]};
+const sizeOf=n=>SIZE[n.t]||[176,62];
+const views={}; let current="life";
+
+function el(tag, attrs, parent){
+  const e=document.createElementNS(NS,tag);
+  for(const k in attrs) e.setAttribute(k, attrs[k]);
+  if(parent) parent.appendChild(e);
+  return e;
+}
+
+function helpers(nodes){
+  const cxL=l=>PADL+l*LW+LW/2, cyR=r=>TOP+r*ROWH+ROWH/2;
+  const P={
+    cx:n=>cxL(n.lane), cy:n=>cyR(n.row), ry:r=>cyR(r), lx:i=>PADL+i*LW,
+    port(n,side,d=0){
+      const [w,h]=sizeOf(n), x=cxL(n.lane), y=cyR(n.row);
+      if(side==="top") return [x+d, y-h/2];
+      if(side==="bottom") return [x+d, y+h/2];
+      if(side==="left") return [x-w/2, y+d];
+      return [x+w/2, y+d];
+    }
+  };
+  return P;
+}
+
+function route(e,s,t,P){
+  if(e.pts) return window.ROUTES[e.pts](P,s,t);
+  const r=e.r||"auto";
+  if(r==="loopL"||r==="loopR"){
+    const side=r==="loopL"?"left":"right";
+    const x=P.cx(s)+(r==="loopL"?-1:1)*(LW/2-4);
+    const a=P.port(s,side), b=P.port(t,side);
+    return [a,[x,a[1]],[x,b[1]],b];
+  }
+  if(r==="gap"){
+    const gy=P.ry(e.g);
+    const a=P.port(s, gy>P.cy(s)?"bottom":"top");
+    return [a,[P.cx(s),gy],[P.cx(t),gy],P.port(t, P.cy(t)>gy?"top":"bottom")];
+  }
+  if(s.lane===t.lane){
+    return t.row>s.row ? [P.port(s,"bottom"),P.port(t,"top")] : [P.port(s,"top"),P.port(t,"bottom")];
+  }
+  if(s.row===t.row){
+    return t.lane>s.lane ? [P.port(s,"right"),P.port(t,"left")] : [P.port(s,"left"),P.port(t,"right")];
+  }
+  if(r==="vh"){
+    const a=P.port(s, t.row>s.row?"bottom":"top");
+    return [a,[P.cx(s),P.cy(t)],P.port(t, t.lane>s.lane?"left":"right")];
+  }
+  const a=P.port(s, t.lane>s.lane?"right":"left");
+  return [a,[P.cx(t),a[1]],P.port(t, t.row>s.row?"top":"bottom")];
+}
+
+function rounded(pts,rad=9){
+  const p=pts.filter((q,i)=>i===0||q[0]!==pts[i-1][0]||q[1]!==pts[i-1][1]);
+  let d=`M${p[0][0]},${p[0][1]}`;
+  for(let i=1;i<p.length-1;i++){
+    const [px,py]=p[i-1],[x,y]=p[i],[nx,ny]=p[i+1];
+    const l1=Math.hypot(x-px,y-py), l2=Math.hypot(nx-x,ny-y);
+    const r=Math.min(rad,l1/2,l2/2);
+    const ax=x-(x-px)/l1*r, ay=y-(y-py)/l1*r, bx=x+(nx-x)/l2*r, by=y+(ny-y)/l2*r;
+    d+=` L${ax},${ay} Q${x},${y} ${bx},${by}`;
+  }
+  const L=p[p.length-1];
+  return {d:d+` L${L[0]},${L[1]}`, p};
+}
+
+function labelPos(p,lt){
+  let best=0,bl=-1;
+  for(let i=0;i<p.length-1;i++){
+    const l=Math.hypot(p[i+1][0]-p[i][0],p[i+1][1]-p[i][1]);
+    if(l>bl){bl=l;best=i;}
+  }
+  const f=lt??.5, a=p[best], b=p[best+1];
+  return [a[0]+(b[0]-a[0])*f, a[1]+(b[1]-a[1])*f];
+}
+
+function drawText(g,lines,x,y,opts){
+  const fs=opts.fs||11.5, lh=fs+3.2;
+  const t=el("text",{x, "text-anchor":"middle", "font-size":fs, fill:opts.fill||"#1b2740", "font-weight":opts.fw||500},g);
+  lines.forEach((ln,i)=>{
+    const ts=el("tspan",{x, y:y-(lines.length-1)*lh/2+i*lh+fs*.36},t);
+    ts.textContent=ln;
+  });
+  return t;
+}
+
+function drawNode(g,n,P){
+  const [w,h]=sizeOf(n), x=P.cx(n), y=P.cy(n);
+  const ng=el("g",{class:"node","data-id":n.id,tabindex:0,role:"button","aria-label":n.l.replace(/\n/g," ")},g);
+  let txtFill="#1b2740", dy=0;
+  if(n.t==="dec"){
+    el("polygon",{class:"shape",points:`${x},${y-h/2} ${x+w/2},${y} ${x},${y+h/2} ${x-w/2},${y}`,fill:"#fff6df",stroke:"#1b2740","stroke-width":1.5},ng);
+  }else if(n.t==="start"||n.t==="end"){
+    el("rect",{class:"shape",x:x-w/2,y:y-h/2,width:w,height:h,rx:h/2,fill:n.t==="start"?"#1b2740":"#2e7a4b",stroke:n.t==="start"?"#1b2740":"#2e7a4b","stroke-width":1.5},ng);
+    txtFill="#f3efe6";
+  }else if(n.t==="data"){
+    const ry=7, x0=x-w/2, y0=y-h/2;
+    el("path",{class:"shape",d:`M${x0},${y0+ry} a${w/2},${ry} 0 0 1 ${w},0 v${h-2*ry} a${w/2},${ry} 0 0 1 ${-w},0 z`,fill:"#eef3fb",stroke:"#2d5fa8","stroke-width":1.5},ng);
+    el("path",{d:`M${x0},${y0+ry} a${w/2},${ry} 0 0 0 ${w},0`,fill:"none",stroke:"#2d5fa8","stroke-width":1.2},ng);
+    dy=4;
+  }else{
+    const st={proc:["#fffdf8","#1b2740",""],fail:["#fff2ea","#d9481c",""],ext:["#fbf9f3","#5d6679","5 3"]}[n.t]||["#fffdf8","#1b2740",""];
+    el("rect",{class:"shape",x:x-w/2,y:y-h/2,width:w,height:h,rx:3,fill:st[0],stroke:st[1],"stroke-width":n.t==="fail"?1.8:1.5,"stroke-dasharray":st[2]},ng);
+    if(n.t==="fail") el("rect",{x:x-w/2,y:y-h/2,width:5,height:h,fill:"#d9481c"},ng);
+  }
+  drawText(ng,n.l.split("\n"),x,y+dy,{fs:n.t==="dec"?10.8:11.5,fill:txtFill,fw:n.t==="start"||n.t==="end"?600:500});
+  if(n.db){
+    const bx=x+w/2-26, by=y-h/2-8;
+    el("rect",{x:bx,y:by,width:22,height:13,rx:6.5,fill:"#2d5fa8"},ng);
+    const t=el("text",{x:bx+11,y:by+9.5,"text-anchor":"middle","font-size":7.5,fill:"#fff","font-family":"Menlo,monospace"},ng);
+    t.textContent="DB";
+  }
+  return ng;
+}
+
+function build(key){
+  const spec=window.SPECS[key], svg=document.getElementById("svg-"+key);
+  const N={}; spec.nodes.forEach(n=>N[n.id]=n);
+  const P=helpers(N);
+  const rows=Math.max(...spec.nodes.map(n=>n.row))+1;
+  const W=PADL+PADR+spec.lanes.length*LW, H=TOP+rows*ROWH+PADB;
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  svg.setAttribute("preserveAspectRatio","xMinYMin meet");
+  svg.innerHTML="";
+  const defs=el("defs",{},svg);
+  for(const k in COLORS){
+    const m=el("marker",{id:`${key}-a-${k}`,viewBox:"0 0 10 10",refX:9,refY:5,markerWidth:7,markerHeight:7,orient:"auto-start-reverse"},defs);
+    el("path",{d:"M0,0 L10,5 L0,10 z",fill:COLORS[k]},m);
+  }
+  const lanes=el("g",{},svg);
+  spec.lanes.forEach((ln,i)=>{
+    const x=P.lx(i);
+    if(i%2===1) el("rect",{x,y:TOP-62,width:LW,height:H-TOP+62-10,fill:"rgba(27,39,64,.035)"},lanes);
+    if(i>0) el("line",{x1:x,y1:TOP-62,x2:x,y2:H-10,stroke:"rgba(27,39,64,.18)","stroke-dasharray":"2 4"},lanes);
+    const t=el("text",{x:x+LW/2,y:TOP-40,"text-anchor":"middle","font-size":14,"font-weight":600,fill:"#1b2740","letter-spacing":".06em",style:"text-transform:uppercase;font-family:'Avenir Next Condensed',Futura,sans-serif"},lanes);
+    t.textContent=ln[0];
+    const s=el("text",{x:x+LW/2,y:TOP-24,"text-anchor":"middle","font-size":9.5,fill:"#5d6679",style:"font-family:Menlo,monospace"},lanes);
+    s.textContent=ln[1];
+  });
+  el("line",{x1:PADL,y1:TOP-12,x2:W-PADR,y2:TOP-12,stroke:"#1b2740","stroke-width":1.5},lanes);
+
+  const eg=el("g",{},svg), ng=el("g",{},svg), lg=el("g",{},svg);
+  const edges=[];
+  spec.edges.forEach((e,i)=>{
+    const s=N[e.f], t=N[e.t], k=e.k||"f";
+    const {d,p}=rounded(route(e,s,t,P));
+    const g=el("g",{class:"edge","data-f":e.f,"data-t":e.t},eg);
+    el("path",{d,fill:"none","stroke-width":1.6,stroke:COLORS[k],"stroke-dasharray":k==="d"?"6 4":"","marker-end":`url(#${key}-a-${k})`},g);
+    let lab=null;
+    if(e.l){
+      const [lx,ly]=labelPos(p,e.lt);
+      lab=el("g",{class:"elabel","data-f":e.f,"data-t":e.t},lg);
+      const tx=el("text",{x:lx,y:ly+3.4,"text-anchor":"middle","font-size":9.8,fill:COLORS[k],style:"font-family:Menlo,monospace"},lab);
+      tx.textContent=e.l;
+      const wpx=e.l.length*6+10;
+      lab.insertBefore(el("rect",{x:lx-wpx/2,y:ly-8,width:wpx,height:16,rx:2,fill:"#fbf8f1",stroke:"rgba(27,39,64,.08)"}),tx);
+    }
+    edges.push({e,g,lab});
+  });
+  spec.nodes.forEach(n=>{
+    const g=drawNode(ng,n,P);
+    const focus=on=>{
+      svg.classList.toggle("dim",on);
+      edges.forEach(x=>{
+        const hit=on&&(x.e.f===n.id||x.e.t===n.id);
+        x.g.classList.toggle("hl",hit); x.lab&&x.lab.classList.toggle("hl",hit);
+        if(hit){[x.e.f,x.e.t].forEach(id=>svg.querySelector(`.node[data-id="${id}"]`)?.classList.add("hl"));}
+      });
+      if(on) g.classList.add("hl"); else svg.querySelectorAll(".node.hl").forEach(q=>q.classList.remove("hl"));
+    };
+    g.addEventListener("mouseenter",()=>focus(true));
+    g.addEventListener("mouseleave",()=>focus(false));
+    const open=()=>{svg.querySelectorAll(".node.sel").forEach(q=>q.classList.remove("sel"));g.classList.add("sel");showDetails(spec,n,N);};
+    g.addEventListener("click",open);
+    g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();open();}});
+  });
+  views[key]={svg,W,z:null};
+}
+
+const TYPE={start:"Start",end:"End",proc:"Step",dec:"Decision",fail:"Stop / reject",data:"Data store",ext:"External"};
+function esc(s){return s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
+function showDetails(spec,n,N){
+  const out=spec.edges.filter(e=>e.f===n.id), inn=spec.edges.filter(e=>e.t===n.id);
+  const li=(e,id)=>`<li><b>${esc(N[id].l.replace(/\n/g," "))}</b>${e.l?` · ${esc(e.l)}`:""}</li>`;
+  document.getElementById("dbody").innerHTML=`
+    <div class="t">${TYPE[n.t]} · ${spec.lanes[n.lane][0]}</div>
+    <h3>${esc(n.l.replace(/\n/g," "))}</h3>
+    ${n.own?`<span class="own">Owner: ${esc(n.own)}</span>`:""}
+    <p>${esc(n.d||"")}</p>
+    ${inn.length?`<h4>Comes from</h4><ul>${inn.map(e=>li(e,e.f)).join("")}</ul>`:""}
+    ${out.length?`<h4>Goes to</h4><ul>${out.map(e=>li(e,e.t)).join("")}</ul>`:""}`;
+  document.getElementById("drawer").classList.add("open");
+}
+document.getElementById("dx").onclick=()=>{
+  document.getElementById("drawer").classList.remove("open");
+  document.querySelectorAll(".node.sel").forEach(q=>q.classList.remove("sel"));
+};
+
+function fit(key){
+  const v=views[key], box=v.svg.parentElement.clientWidth-4;
+  return Math.max(.6,Math.min(1.25,box/v.W));
+}
+function applyZoom(key){
+  const v=views[key]; const z=v.z??fit(key);
+  v.svg.style.width=(v.W*z)+"px";
+}
+
+["life","arch","safe"].forEach(build);
+
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{
+  current=b.dataset.view;
+  document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",x===b?"true":"false"));
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id==="view-"+current));
+  document.getElementById("drawer").classList.remove("open");
+  applyZoom(current);
+}));
+document.querySelectorAll(".zoom button").forEach(b=>b.addEventListener("click",()=>{
+  const v=views[current], z=v.z??fit(current);
+  v.z = b.dataset.z==="fit" ? null : Math.max(.45,Math.min(2,z*(b.dataset.z==="+"?1.15:1/1.15)));
+  applyZoom(current);
+}));
+const ro=new ResizeObserver(()=>applyZoom(current));
+document.querySelectorAll(".canvas").forEach(c=>ro.observe(c));
+Object.keys(views).forEach(k=>{views[k].svg.style.width=views[k].W+"px";});
+applyZoom(current);
+// ---- Downloads ----
+const NAMES={life:"01-run-lifecycle",arch:"02-architecture",safe:"03-safety-abort"};
+const TITLES={life:"01 · Run lifecycle",arch:"02 · Architecture",safe:"03 · Safety & abort"};
+function svgString(key){
+  const v=views[key], src=v.svg, vb=src.getAttribute("viewBox").split(" ").map(Number);
+  const c=src.cloneNode(true);
+  c.removeAttribute("style"); c.classList.remove("dim");
+  c.querySelectorAll(".hl,.sel").forEach(q=>q.classList.remove("hl","sel"));
+  const H=vb[3]+40;
+  c.setAttribute("xmlns",NS); c.setAttribute("width",vb[2]); c.setAttribute("height",H);
+  c.setAttribute("viewBox",`0 -40 ${vb[2]} ${H}`);
+  const bg=document.createElementNS(NS,"rect");
+  bg.setAttribute("x",0);bg.setAttribute("y",-40);bg.setAttribute("width",vb[2]);bg.setAttribute("height",H);bg.setAttribute("fill","#f3efe6");
+  c.insertBefore(bg,c.firstChild);
+  const t=document.createElementNS(NS,"text");
+  t.setAttribute("x",30);t.setAttribute("y",-8);t.setAttribute("font-size",20);t.setAttribute("font-weight",600);t.setAttribute("fill","#1b2740");
+  t.setAttribute("style","font-family:'Avenir Next Condensed',Futura,'Segoe UI',sans-serif;text-transform:uppercase;letter-spacing:.04em");
+  t.textContent="Performance audit platform · "+TITLES[key];
+  c.appendChild(t);
+  c.querySelectorAll("text").forEach(x=>{if(!x.getAttribute("font-family")&&!(x.getAttribute("style")||"").includes("font-family"))x.setAttribute("font-family","'Avenir Next','Segoe UI',Helvetica,Arial,sans-serif");});
+  return {s:'<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(c), w:vb[2], h:H};
+}
+function save(blob,name){
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob); a.download=name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+function dlSVG(key){ save(new Blob([svgString(key).s],{type:"image/svg+xml"}),`perf-audit-${NAMES[key]}.svg`); }
+function dlPNG(key){
+  const {s,w,h}=svgString(key), img=new Image(), sc=2;
+  img.onload=()=>{
+    const cv=document.createElement("canvas"); cv.width=w*sc; cv.height=h*sc;
+    const ctx=cv.getContext("2d"); ctx.scale(sc,sc); ctx.drawImage(img,0,0,w,h);
+    cv.toBlob(b=>save(b,`perf-audit-${NAMES[key]}.png`),"image/png");
+  };
+  img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(s);
+}
+const HTML_NAME="perf-audit-system-flowchart";
+function dlHTML(){ save(new Blob([window.STANDALONE_HTML],{type:"text/html"}),HTML_NAME+".html"); }
+
+// Minimal ZIP writer (stored, no compression) with CRC-32.
+const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+function crc32(b){let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRC[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+function zip(files){
+  const enc=new TextEncoder(), parts=[], cd=[]; let off=0;
+  const d=new Date(), time=(d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1),
+        date=((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate();
+  files.forEach(f=>{
+    const name=enc.encode(f.name), data=enc.encode(f.text), crc=crc32(data);
+    const lh=new DataView(new ArrayBuffer(30));
+    [[0,0x04034b50,4],[4,20,2],[6,0x0800,2],[8,0,2],[10,time,2],[12,date,2],[14,crc,4],[18,data.length,4],[22,data.length,4],[26,name.length,2],[28,0,2]]
+      .forEach(([o,v,s])=>s===4?lh.setUint32(o,v,true):lh.setUint16(o,v,true));
+    parts.push(new Uint8Array(lh.buffer),name,data);
+    const ch=new DataView(new ArrayBuffer(46));
+    [[0,0x02014b50,4],[4,20,2],[6,20,2],[8,0x0800,2],[10,0,2],[12,time,2],[14,date,2],[16,crc,4],[20,data.length,4],[24,data.length,4],[28,name.length,2],[30,0,2],[32,0,2],[34,0,2],[36,0,2],[38,0,4],[42,off,4]]
+      .forEach(([o,v,s])=>s===4?ch.setUint32(o,v,true):ch.setUint16(o,v,true));
+    cd.push(new Uint8Array(ch.buffer),name);
+    off+=30+name.length+data.length;
+  });
+  const cdSize=cd.reduce((a,b)=>a+b.length,0), e=new DataView(new ArrayBuffer(22));
+  [[0,0x06054b50,4],[4,0,2],[6,0,2],[8,files.length,2],[10,files.length,2],[12,cdSize,4],[16,off,4],[20,0,2]]
+    .forEach(([o,v,s])=>s===4?e.setUint32(o,v,true):e.setUint16(o,v,true));
+  return new Blob([...parts,...cd,new Uint8Array(e.buffer)],{type:"application/zip"});
+}
+function dlZip(){
+  const readme="Performance Audit Platform - System Flowchart\n\nOpen perf-audit-system-flowchart.html in any modern browser (Chrome, Edge, Safari, Firefox).\nWorks offline, nothing to install.\n\nSheets: 01 Run lifecycle, 02 Architecture, 03 Safety & abort.\nHover a box to trace its connections, click it for details and ownership.\nPrint (Ctrl/Cmd+P) > Save as PDF gives one sheet per A3 page.\n";
+  save(zip([{name:HTML_NAME+".html",text:window.STANDALONE_HTML},{name:"README.txt",text:readme}]),HTML_NAME+".zip");
+}
+if(window.STANDALONE_HTML){
+  // Hosted copy: file downloads are blocked here, so offer the source to copy into a local .html file.
+  const bar=document.querySelector(".dlbar");
+  document.querySelectorAll('[data-dl]').forEach(b=>b.remove());
+  bar.querySelector(".dll").textContent="Share";
+  const btn=document.createElement("button");
+  btn.textContent="Copy interactive HTML";
+  bar.appendChild(btn);
+  const note=document.createElement("span");
+  note.className="dlnote";
+  note.textContent="For a static copy, use Dia's Share button: Download as PDF or Copy as Image.";
+  bar.appendChild(note);
+  const panel=document.createElement("div");
+  panel.className="srcpanel";
+  panel.innerHTML=`<ol>
+    <li>Click <b>Copy</b> below (or click in the box, then Cmd/Ctrl+A and Cmd/Ctrl+C).</li>
+    <li>Paste into a plain-text editor such as VS Code or Notepad. In TextEdit, choose Format → Make Plain Text first.</li>
+    <li>Save as <code>perf-audit-system-flowchart.html</code>. Right-click the file → Compress to make the zip.</li>
+  </ol>
+  <div class="srcrow"><button class="srccopy">Copy</button><span class="srcmsg"></span></div>
+  <textarea readonly spellcheck="false"></textarea>`;
+  bar.after(panel);
+  const ta=panel.querySelector("textarea"), msg=panel.querySelector(".srcmsg");
+  ta.value=window.STANDALONE_HTML;
+  btn.addEventListener("click",()=>{panel.classList.toggle("open");if(panel.classList.contains("open")){ta.focus();ta.select();}});
+  panel.querySelector(".srccopy").addEventListener("click",async()=>{
+    ta.focus(); ta.select();
+    let ok=false;
+    try{ await navigator.clipboard.writeText(ta.value); ok=true; }catch(e){ try{ ok=document.execCommand("copy"); }catch(_){} }
+    msg.textContent = ok ? "Copied. Paste it into a plain-text file and save as .html" : "Text is selected. Press Cmd/Ctrl+C to copy";
+  });
+} else {
+  document.querySelectorAll('[data-dl="html"],[data-dl="zip"]').forEach(b=>b.remove());
+}
+
+document.querySelectorAll("[data-dl]").forEach(b=>b.addEventListener("click",()=>{
+  const k=b.dataset.dl;
+  if(k==="html") dlHTML();
+  else if(k==="zip") dlZip();
+  else if(k==="svg") dlSVG(current);
+  else if(k==="png") dlPNG(current);
+  else if(k==="all") ["life","arch","safe"].forEach((x,i)=>setTimeout(()=>dlPNG(x),i*600));
+  else if(k==="pdf") window.print();
+}));
+
+window.addEventListener("beforeprint",()=>Object.values(views).forEach(v=>v.svg.style.width="100%"));
+window.addEventListener("afterprint",()=>Object.keys(views).forEach(applyZoom));
+})();
+
+</script>
+</body>
+</html>

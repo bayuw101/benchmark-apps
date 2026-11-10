@@ -1,0 +1,103 @@
+# Same image twice: only mock-target carries the approved label, so unapproved-target must be unreachable from perf-staging/perf-prod.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mock-target
+  namespace: targets
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mock-target
+  template:
+    metadata:
+      labels:
+        app: mock-target
+        btb.io/approved-target: "true"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+        - name: mock-target
+          image: btb-mock-target:local
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: LATENCY_MS
+              value: "20"
+            # Enough seats that receive-poll doesn't sell out within a run; the seed hook resets them.
+            - name: SEATS
+              value: "100000"
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mock-target
+  namespace: targets
+spec:
+  selector:
+    app: mock-target
+  ports:
+    - port: 3000
+      targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unapproved-target
+  namespace: targets
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: unapproved-target
+  template:
+    metadata:
+      labels:
+        app: unapproved-target
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+        - name: unapproved-target
+          image: btb-mock-target:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: unapproved-target
+  namespace: targets
+spec:
+  selector:
+    app: unapproved-target
+  ports:
+    - port: 3000
+      targetPort: 3000

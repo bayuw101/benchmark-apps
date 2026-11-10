@@ -1,0 +1,302 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>BTB Database Schema</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: a card per table, grouped by area in a wrapping grid; an SVG overlay draws the foreign keys between cards. */
+  :root {
+    --bg: #f5f6f4;
+    --surface: #ffffff;
+    --line: #d9ddd6;
+    --fg: #1c2420;
+    --muted: #68736c;
+    --accent: #0f6b5a;
+    --accent-soft: #e2f0eb;
+    --key: #b4541b;
+    --guard: #f3ecdc;
+    --guard-fg: #6b4d12;
+    --link: #8a9a92;
+    --link-hot: #0f6b5a;
+    --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #151a18; --surface: #1e2522; --line: #313b36; --fg: #e6ebe8; --muted: #93a09a;
+      --accent: #5fc3a8; --accent-soft: #1f3a33; --key: #e6935a; --guard: #2d2a1e; --guard-fg: #e4c87a;
+      --link: #566860; --link-hot: #5fc3a8; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #151a18; --surface: #1e2522; --line: #313b36; --fg: #e6ebe8; --muted: #93a09a;
+    --accent: #5fc3a8; --accent-soft: #1f3a33; --key: #e6935a; --guard: #2d2a1e; --guard-fg: #e4c87a;
+    --link: #566860; --link-hot: #5fc3a8; color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 14px; line-height: 1.45;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 48px; }
+  header { max-width: 1480px; margin: 0 auto 20px; display: flex; flex-wrap: wrap; gap: 8px 32px; align-items: baseline; }
+  h1 { font-size: 22px; font-weight: 600; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+  header p { margin: 0; color: var(--muted); max-width: 70ch; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0 auto 16px; max-width: 1480px; font-size: 12px; color: var(--muted); align-items: center; }
+  .legend b { font-weight: 500; color: var(--fg); }
+  .legend .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; vertical-align: -1px; margin-right: 4px; }
+  .legend .sw.guard { background: var(--guard); border: 1px solid var(--guard-fg); }
+  .legend .sw.accent { background: var(--accent-soft); border: 1px solid var(--accent); }
+  .legend .sw.line { height: 2px; width: 18px; background: var(--link); border-radius: 1px; }
+  #board { position: relative; max-width: 1480px; margin: 0 auto; }
+  #wires { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+  #wires path { fill: none; stroke: var(--link); stroke-width: 1.4; opacity: .55; transition: opacity .15s, stroke .15s; }
+  #wires path.hot { stroke: var(--link-hot); opacity: 1; stroke-width: 2; }
+  #wires.focus path:not(.hot) { opacity: .12; }
+  .areas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; position: relative; }
+  .area { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+  .area > h2 { margin: 0; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .area > h2 span { color: var(--fg); font-weight: 400; letter-spacing: 0; text-transform: none; display: block; font-size: 12px; margin-top: 2px; }
+  .table { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 1px 2px rgba(20, 30, 26, .06); min-width: 0; transition: border-color .15s; }
+  .table.hot { border-color: var(--accent); }
+  .table.dim { opacity: .45; }
+  .table h3 { margin: 0; padding: 8px 10px; font-family: var(--mono); font-size: 13px; font-weight: 500; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .table h3 small { font-family: var(--sans); font-weight: 400; font-size: 11px; color: var(--muted); text-align: right; }
+  .cols { list-style: none; margin: 0; padding: 4px 0; }
+  .col { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; gap: 6px; align-items: baseline; padding: 2px 10px; font-family: var(--mono); font-size: 12px; min-width: 0; }
+  .col.hot { background: var(--accent-soft); }
+  .col .k { font-size: 9px; font-weight: 600; letter-spacing: .04em; color: var(--key); font-family: var(--sans); }
+  .col .k.fk { color: var(--accent); }
+  .col .n { overflow-wrap: anywhere; }
+  .col .n.null { color: var(--muted); }
+  .col .t { color: var(--muted); font-size: 11px; white-space: nowrap; }
+  .table .note { font-size: 11.5px; color: var(--muted); padding: 6px 10px 8px; border-top: 1px dashed var(--line); margin: 0; font-family: var(--sans); }
+  .guards { margin: 6px 10px 10px; display: flex; flex-direction: column; gap: 4px; }
+  .guard { background: var(--guard); color: var(--guard-fg); font-size: 11.5px; padding: 4px 8px; border-radius: 4px; line-height: 1.35; }
+  .guard code { font-family: var(--mono); font-size: 11px; }
+  .enums { max-width: 1480px; margin: 36px auto 0; }
+  .enums h2 { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+  .enum-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px 20px; }
+  .enum { font-size: 12px; min-width: 0; }
+  .enum b { font-family: var(--mono); font-weight: 500; display: block; margin-bottom: 2px; }
+  .enum span { font-family: var(--mono); color: var(--muted); overflow-wrap: anywhere; }
+  .ops { max-width: 1480px; margin: 32px auto 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px 28px; font-size: 13px; }
+  .ops h2 { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+  .ops ul { margin: 0; padding-left: 18px; }
+  .ops li { margin: 3px 0; }
+  .ops code { font-family: var(--mono); font-size: 12px; background: var(--surface); border: 1px solid var(--line); padding: 0 4px; border-radius: 3px; }
+  @media (max-width: 1100px) { .areas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .areas { grid-template-columns: minmax(0, 1fr); } #wires { display: none; } .col .t { white-space: normal; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header>
+  <h1>BTB database schema</h1>
+  <p>PostgreSQL 17 · Drizzle · 14 tables, 9 enums · from <code>apps/web/src/db/schema.ts</code> and <code>drizzle/0000_init.sql</code>, <code>0001_guards.sql</code>. Hover a table to trace its foreign keys.</p>
+</header>
+<div class="legend">
+  <span><b class="k" style="color:var(--key)">PK</b> primary key</span>
+  <span><b style="color:var(--accent)">FK</b> foreign key</span>
+  <span><b>UQ</b> unique</span>
+  <span><span style="color:var(--muted)">name?</span> nullable</span>
+  <span><span class="sw line"></span> references</span>
+  <span><span class="sw guard"></span> enforced by the database (trigger, index, grant)</span>
+</div>
+
+<div id="board">
+  <svg id="wires" aria-hidden="true"></svg>
+  <div class="areas" id="areas"></div>
+</div>
+
+<section class="enums">
+  <h2>Enums</h2>
+  <div class="enum-grid" id="enums"></div>
+</section>
+
+<section class="ops">
+  <div>
+    <h2>Append-only and immutable</h2>
+    <ul>
+      <li><code>audit_logs</code>: trigger rejects UPDATE and DELETE for every role. App role <code>btb_app</code> has SELECT + INSERT only, on the parent and on each partition.</li>
+      <li><code>scenario_versions</code>: same trigger. A change is a new version row.</li>
+    </ul>
+  </div>
+  <div>
+    <h2>Partitions and retention</h2>
+    <ul>
+      <li><code>audit_logs</code> is <code>PARTITION BY RANGE (at)</code>, monthly, pre-created through 2028-12, plus <code>audit_logs_default</code>.</li>
+      <li><code>audit_logs_add_month(date)</code> adds one. <code>audit_logs_drop_before(ts)</code> drops whole months: 1-year retention.</li>
+    </ul>
+  </div>
+  <div>
+    <h2>Run ids and concurrency</h2>
+    <ul>
+      <li><code>next_run_id()</code> → <code>RUN-0001</code>, 4 digits minimum, never truncated.</li>
+      <li>Partial unique index on <code>runs.target_id</code> where status is starting, running or stopping: one active run per target.</li>
+    </ul>
+  </div>
+  <div>
+    <h2>Seeded by migration</h2>
+    <ul>
+      <li><code>environments</code>: staging (perf-staging) and prod-like (perf-prod) with placeholder ceilings.</li>
+      <li>Everything else is empty: journeys sync from the runner image, the rest comes from Admin.</li>
+    </ul>
+  </div>
+</section>
+
+<script>
+  // Column: [name, type, flags]. flags: pk, fk:table, uq, null.
+  const TABLES = [
+    { area: 0, name: "users", sub: "roles live here (E1.3)", cols: [
+      ["id", "uuid", "pk"], ["entra_oid", "text", "null uq"], ["email", "text", "uq"], ["name", "text", ""], ["role", "role", "null"], ["created_at", "timestamptz", ""], ["updated_at", "timestamptz", ""]],
+      note: "role null = signed in, no access. email unique case-insensitively." },
+    { area: 0, name: "projects", sub: "scopes everything", cols: [
+      ["id", "text (slug)", "pk"], ["name", "text", "uq"], ["description", "text", "null"], ["created_at", "timestamptz", ""], ["updated_at", "timestamptz", ""]] },
+    { area: 0, name: "environments", sub: "2 rows, admin-edited ceilings", cols: [
+      ["id", "text", "pk"], ["namespace", "text", "uq"], ["max_vus", "int", ""], ["max_rps", "int", ""], ["max_duration_sec", "int", ""], ["max_ramp_per_min", "int", ""], ["updated_at", "timestamptz", ""]],
+      note: "Approval rules (2 approvers on prod-like, soak/stress staging only) stay in policy code." },
+    { area: 0, name: "targets", sub: "allowlist + reference peak (E2.1)", cols: [
+      ["id", "uuid", "pk"], ["project_id", "text", "fk:projects"], ["name", "text", ""], ["environment", "text", "fk:environments"], ["peak_vus", "int", ""], ["peak_rps", "int", ""], ["hosts", "text[]", ""], ["paths", "text[]", ""], ["methods", "text[]", ""], ["redirects", "text[]", ""], ["health_path", "text", ""], ["created_at", "timestamptz", ""], ["updated_at", "timestamptz", ""]],
+      guards: ["UQ (project_id, name)"] },
+    { area: 0, name: "test_data_pools", sub: "identities per target (E2.6)", cols: [
+      ["target_id", "uuid", "pk fk:targets"], ["total", "int", ""], ["secret_path", "text", ""], ["seed_hook", "jsonb", "null"], ["cleanup_hook", "jsonb", "null"], ["updated_at", "timestamptz", ""]],
+      note: "Credentials never stored: only the External Secrets path. Hook shape is TBD-6." },
+
+    { area: 1, name: "runner_images", sub: "what the catalog synced from", cols: [
+      ["tag", "text", "pk"], ["digest", "text", "null"], ["synced_at", "timestamptz", ""]] },
+    { area: 1, name: "journeys", sub: "read-only, synced from the image (E2.2)", cols: [
+      ["id", "text", "pk"], ["title", "text", ""], ["description", "text", ""], ["version", "text", ""], ["browser", "bool", ""], ["steps", "text[]", ""], ["params", "jsonb", ""], ["budgets", "jsonb", ""], ["image_tag", "text", "fk:runner_images"], ["synced_at", "timestamptz", ""]] },
+    { area: 1, name: "scenarios", sub: "journey + name per project", cols: [
+      ["id", "uuid", "pk"], ["project_id", "text", "fk:projects"], ["name", "text", ""], ["journey_id", "text", "fk:journeys"], ["created_at", "timestamptz", ""]],
+      guards: ["UQ (project_id, name)"] },
+    { area: 1, name: "scenario_versions", sub: "immutable (E2.3)", cols: [
+      ["id", "uuid", "pk"], ["scenario_id", "uuid", "fk:scenarios"], ["version", "int", ""], ["model", "load_model", ""], ["browser", "bool", ""], ["p95_ms", "int", "null"], ["error_rate_pct", "numeric(5,2)", "null"], ["image_tag", "text", "fk:runner_images"], ["params", "jsonb", ""], ["note", "text", "null"], ["created_by", "uuid", "fk:users"], ["created_at", "timestamptz", ""]],
+      guards: ["UQ (scenario_id, version)", "CHECK both thresholds set or both null", "Trigger: no UPDATE / DELETE"] },
+
+    { area: 2, name: "runs", sub: "immutable manifest + hash (E3)", cols: [
+      ["id", "text RUN-0001", "pk"], ["project_id", "text", "fk:projects"], ["scenario_version_id", "uuid", "fk:scenario_versions"], ["target_id", "uuid", "fk:targets"], ["environment", "text", "fk:environments"], ["preset", "preset", ""], ["network", "network_profile", "null"], ["release_id", "text", "null"], ["status", "run_status", ""], ["manifest", "jsonb", ""], ["manifest_hash", "text sha-256", ""], ["duration_sec", "int", ""], ["created_by", "uuid", "fk:users"], ["created_at", "timestamptz", ""], ["submitted_at", "timestamptz", "null"], ["start_requested_at", "timestamptz", "null"], ["started_at", "timestamptz", "null"], ["ended_at", "timestamptz", "null"], ["preflight", "jsonb", "null"], ["queued_behind", "text", "null"], ["abort_reason", "abort_reason", "null"], ["verdict", "verdict", "null"], ["caveats", "verdict_caveat[]", ""], ["updated_at", "timestamptz", ""]],
+      guards: ["UQ target_id WHERE status IN (starting, running, stopping)", "CHECK manifest_hash ~ ^[0-9a-f]{64}$", "CHECK ended_at ≥ started_at", "DEFAULT id = next_run_id()"],
+      note: "Timeline = these timestamps + audit_logs rows with run_id. Planned load and thresholds live in manifest." },
+    { area: 2, name: "approvals", sub: "bound to the hash approved (E4)", cols: [
+      ["id", "uuid", "pk"], ["run_id", "text", "fk:runs"], ["user_id", "uuid", "null fk:users"], ["rule", "text", "null"], ["manifest_hash", "text", ""], ["decision", "approval_decision", ""], ["note", "text", "null"], ["created_at", "timestamptz", ""], ["expires_at", "timestamptz", "null"]],
+      guards: ["UQ (run_id, user_id, manifest_hash) WHERE decision = approved", "CHECK user_id XOR rule (rule = auto-approved by policy)"] },
+
+    { area: 3, name: "run_summaries", sub: "end-of-run numbers (E9.1)", cols: [
+      ["run_id", "text", "pk fk:runs"], ["p50_ms", "int", ""], ["p95_ms", "int", ""], ["p99_ms", "int", ""], ["error_rate_pct", "numeric(6,3)", ""], ["peak_rps", "int", ""], ["max_vus", "int", ""], ["achieved_load", "int", ""], ["achieved_duration_sec", "int", ""], ["gap_sec", "int", ""], ["browser", "jsonb steps[]", "null"], ["oversold_seats", "int", "null"], ["double_charges", "int", "null"], ["charged_no_ticket", "int", "null"], ["created_at", "timestamptz", ""]],
+      guards: ["CHECK integrity counts all set or all null (null = not verified)"] },
+    { area: 3, name: "baselines", sub: "one pinned run per key (E9.4)", cols: [
+      ["target_id", "uuid", "pk fk:targets"], ["scenario_id", "uuid", "pk fk:scenarios"], ["preset", "preset", "pk"], ["run_id", "text", "fk:runs"], ["set_by", "uuid", "fk:users"], ["set_at", "timestamptz", ""]] },
+    { area: 3, name: "run_artifacts", sub: "S3 keys (E5.7), 90-day lifecycle", cols: [
+      ["id", "uuid", "pk"], ["run_id", "text", "fk:runs"], ["name", "text", ""], ["label", "text", ""], ["s3_key", "text", "uq"], ["content_type", "text", ""], ["size_bytes", "bigint", ""], ["created_at", "timestamptz", ""]],
+      guards: ["UQ (run_id, name)"], note: "summary.json, browser-errors.json, screenshots and report.html all land here." },
+    { area: 3, name: "audit_logs", sub: "append-only, monthly partitions (E1.4)", cols: [
+      ["id", "bigint identity", "pk"], ["at", "timestamptz", "pk"], ["actor_id", "uuid", "null"], ["actor_name", "text", ""], ["action", "text", ""], ["detail", "text", "null"], ["project_id", "text", "null"], ["run_id", "text", "null"], ["data", "jsonb", "null"]],
+      guards: ["PARTITION BY RANGE (at)", "Trigger: no UPDATE / DELETE", "btb_app: SELECT + INSERT only"],
+      note: "No FKs on purpose: audit rows outlive what they describe. actor_name is a snapshot." },
+  ];
+
+  const AREAS = [
+    ["People and targets", "who can act, where load may go"],
+    ["Catalog", "journeys from the image, versioned scenarios"],
+    ["Runs", "the manifest, its hash, who approved it"],
+    ["Results and audit", "what came out, what happened"],
+  ];
+
+  const ENUMS = {
+    role: "viewer · engineer · approver · admin",
+    run_status: "draft · pending_approval · approved · queued · starting · running · stopping · completed · failed · aborted · rejected",
+    preset: "smoke · baseline · peak · spike · soak · stress",
+    load_model: "vus · rps",
+    network_profile: "stadium-4g · wifi-baseline",
+    abort_reason: "emergency_stop · lease_expired · threshold · target_health · telemetry_lost · policy_breach · kubernetes_failure",
+    verdict: "pass · fail",
+    verdict_caveat: "measurement_gap · generator_saturated · integrity_not_verified",
+    approval_decision: "approved · rejected",
+  };
+
+  const areasEl = document.getElementById("areas");
+  const areaEls = AREAS.map(([title, sub]) => {
+    const el = document.createElement("div");
+    el.className = "area";
+    el.innerHTML = `<h2>${title}<span>${sub}</span></h2>`;
+    areasEl.appendChild(el);
+    return el;
+  });
+
+  const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  for (const t of TABLES) {
+    const card = document.createElement("div");
+    card.className = "table";
+    card.id = "t-" + t.name;
+    const cols = t.cols.map(([n, ty, f]) => {
+      const fk = (f.match(/fk:(\S+)/) || [])[1];
+      const keys = [f.includes("pk") && '<span class="k">PK</span>', fk && '<span class="k fk">FK</span>', f.includes("uq") && '<span class="k">UQ</span>'].filter(Boolean).join("");
+      return `<li class="col" data-fk="${fk || ""}" data-col="${n}"><span>${keys}</span><span class="n ${f.includes("null") ? "null" : ""}">${esc(n)}${f.includes("null") ? "?" : ""}</span><span class="t">${esc(ty)}</span></li>`;
+    }).join("");
+    card.innerHTML = `<h3>${t.name}<small>${esc(t.sub)}</small></h3><ul class="cols">${cols}</ul>` +
+      (t.guards ? `<div class="guards">${t.guards.map((g) => `<div class="guard">${esc(g)}</div>`).join("")}</div>` : "") +
+      (t.note ? `<p class="note">${esc(t.note)}</p>` : "");
+    areaEls[t.area].appendChild(card);
+  }
+
+  document.getElementById("enums").innerHTML = Object.entries(ENUMS).map(([k, v]) => `<div class="enum"><b>${k}</b><span>${v}</span></div>`).join("");
+
+  // Wires: from each FK column row to the referenced table's header. Redrawn on resize.
+  const svg = document.getElementById("wires");
+  const board = document.getElementById("board");
+  const wires = [];
+  function draw() {
+    svg.innerHTML = "";
+    wires.length = 0;
+    const b = board.getBoundingClientRect();
+    svg.setAttribute("viewBox", `0 0 ${b.width} ${b.height}`);
+    for (const row of document.querySelectorAll(".col[data-fk]")) {
+      const to = row.dataset.fk && document.getElementById("t-" + row.dataset.fk);
+      if (!to) continue;
+      const r = row.getBoundingClientRect();
+      const h = to.querySelector("h3").getBoundingClientRect();
+      const fromRight = h.left >= r.right - 8;
+      const x1 = (fromRight ? r.right : r.left) - b.left;
+      const y1 = r.top + r.height / 2 - b.top;
+      const toLeft = h.left >= r.right - 8 || (h.left < r.left && h.right > r.left);
+      const x2 = (h.left >= r.right - 8 ? h.left : h.right) - b.left;
+      const y2 = h.top + h.height / 2 - b.top;
+      const dx = Math.max(24, Math.abs(x2 - x1) / 2);
+      const c1 = fromRight ? x1 + dx : x1 - dx;
+      const c2 = x2 > x1 ? x2 - dx : x2 + dx;
+      const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      p.setAttribute("d", `M${x1},${y1} C${c1},${y1} ${c2},${y2} ${x2},${y2}`);
+      const from = row.closest(".table");
+      p.dataset.from = from.id; p.dataset.to = to.id; p.dataset.col = row.dataset.col;
+      svg.appendChild(p);
+      wires.push({ p, from, to, row });
+      void toLeft;
+    }
+  }
+
+  function focus(card) {
+    const on = !!card;
+    svg.classList.toggle("focus", on);
+    document.querySelectorAll(".table").forEach((t) => { t.classList.remove("hot", "dim"); });
+    document.querySelectorAll(".col.hot").forEach((c) => c.classList.remove("hot"));
+    for (const w of wires) {
+      const hit = on && (w.from === card || w.to === card);
+      w.p.classList.toggle("hot", hit);
+      if (hit) { w.from.classList.add("hot"); w.to.classList.add("hot"); w.row.classList.add("hot"); }
+    }
+    if (on) {
+      card.classList.add("hot");
+      document.querySelectorAll(".table:not(.hot)").forEach((t) => t.classList.add("dim"));
+    }
+  }
+  document.querySelectorAll(".table").forEach((card) => {
+    card.addEventListener("mouseenter", () => focus(card));
+    card.addEventListener("mouseleave", () => focus(null));
+    card.tabIndex = 0;
+    card.addEventListener("focus", () => focus(card));
+    card.addEventListener("blur", () => focus(null));
+  });
+
+  draw();
+  document.fonts && document.fonts.ready.then(draw);
+  let raf;
+  new ResizeObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(draw); }).observe(board);
+</script>
+
+</body></html>

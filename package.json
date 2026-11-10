@@ -1,0 +1,26 @@
+{
+  "name": "btb",
+  "private": true,
+  "packageManager": "pnpm@10.34.9",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @btb/web dev",
+    "dev:up": "scripts/dev.sh up",
+    "dev:up:ui": "scripts/dev.sh up --ui-only",
+    "dev:status": "scripts/dev.sh status",
+    "dev:down": "scripts/dev.sh down",
+    "dev:worker": "pnpm --filter @btb/worker dev",
+    "check": "pnpm -r --if-present check && node --test infra/mock-target/server.test.mjs",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test",
+    "db:generate": "pnpm --filter @btb/core db:generate",
+    "db:migrate": "pnpm --filter @btb/core db:migrate",
+    "db:seed": "pnpm --filter @btb/core db:seed",
+    "db:seed:runs": "pnpm --filter @btb/core db:seed:runs",
+    "db:first-admin": "pnpm --filter @btb/core db:first-admin",
+    "catalog:build": "pnpm --filter @btb/journeys build",
+    "catalog:sync": "pnpm --filter @btb/core catalog:sync"
+  }
+}

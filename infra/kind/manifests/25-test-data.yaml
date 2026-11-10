@@ -1,0 +1,21 @@
+# Dev-only test-data Secrets (PRD E2.6) for the seeded mock targets. Fake identities: the mock ignores them.
+# In real environments an ExternalSecret fills btb-test-data-<target> from the pool's secret path instead;
+# the platform stores only that path, and runner pods mount the Secret read-only.
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: btb-test-data-mock-target
+  namespace: perf-staging
+type: Opaque
+stringData:
+  identities.json: '[{"user":"loadtest-001@example.test"},{"user":"loadtest-002@example.test"},{"user":"loadtest-003@example.test"},{"user":"loadtest-004@example.test"},{"user":"loadtest-005@example.test"},{"user":"loadtest-006@example.test"},{"user":"loadtest-007@example.test"},{"user":"loadtest-008@example.test"},{"user":"loadtest-009@example.test"},{"user":"loadtest-010@example.test"},{"user":"loadtest-011@example.test"},{"user":"loadtest-012@example.test"},{"user":"loadtest-013@example.test"},{"user":"loadtest-014@example.test"},{"user":"loadtest-015@example.test"},{"user":"loadtest-016@example.test"},{"user":"loadtest-017@example.test"},{"user":"loadtest-018@example.test"},{"user":"loadtest-019@example.test"},{"user":"loadtest-020@example.test"},{"user":"loadtest-021@example.test"},{"user":"loadtest-022@example.test"},{"user":"loadtest-023@example.test"},{"user":"loadtest-024@example.test"},{"user":"loadtest-025@example.test"},{"user":"loadtest-026@example.test"},{"user":"loadtest-027@example.test"},{"user":"loadtest-028@example.test"},{"user":"loadtest-029@example.test"},{"user":"loadtest-030@example.test"},{"user":"loadtest-031@example.test"},{"user":"loadtest-032@example.test"},{"user":"loadtest-033@example.test"},{"user":"loadtest-034@example.test"},{"user":"loadtest-035@example.test"},{"user":"loadtest-036@example.test"},{"user":"loadtest-037@example.test"},{"user":"loadtest-038@example.test"},{"user":"loadtest-039@example.test"},{"user":"loadtest-040@example.test"}]'
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: btb-test-data-mock-target-prod
+  namespace: perf-prod
+type: Opaque
+stringData:
+  identities.json: '[{"user":"loadtest-001@example.test"},{"user":"loadtest-002@example.test"},{"user":"loadtest-003@example.test"},{"user":"loadtest-004@example.test"},{"user":"loadtest-005@example.test"},{"user":"loadtest-006@example.test"},{"user":"loadtest-007@example.test"},{"user":"loadtest-008@example.test"},{"user":"loadtest-009@example.test"},{"user":"loadtest-010@example.test"},{"user":"loadtest-011@example.test"},{"user":"loadtest-012@example.test"},{"user":"loadtest-013@example.test"},{"user":"loadtest-014@example.test"},{"user":"loadtest-015@example.test"},{"user":"loadtest-016@example.test"},{"user":"loadtest-017@example.test"},{"user":"loadtest-018@example.test"},{"user":"loadtest-019@example.test"},{"user":"loadtest-020@example.test"},{"user":"loadtest-021@example.test"},{"user":"loadtest-022@example.test"},{"user":"loadtest-023@example.test"},{"user":"loadtest-024@example.test"},{"user":"loadtest-025@example.test"},{"user":"loadtest-026@example.test"},{"user":"loadtest-027@example.test"},{"user":"loadtest-028@example.test"},{"user":"loadtest-029@example.test"},{"user":"loadtest-030@example.test"},{"user":"loadtest-031@example.test"},{"user":"loadtest-032@example.test"},{"user":"loadtest-033@example.test"},{"user":"loadtest-034@example.test"},{"user":"loadtest-035@example.test"},{"user":"loadtest-036@example.test"},{"user":"loadtest-037@example.test"},{"user":"loadtest-038@example.test"},{"user":"loadtest-039@example.test"},{"user":"loadtest-040@example.test"}]'

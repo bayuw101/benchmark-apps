@@ -1,0 +1,17 @@
+1794149573 1502 mCPU 586 MiB
+1794149578 1497 mCPU 254 MiB
+1794149583 1495 mCPU 655 MiB
+1794149588 1500 mCPU 405 MiB
+1794149593 1495 mCPU 660 MiB
+1794149598 1498 mCPU 531 MiB
+1794149604 1499 mCPU 354 MiB
+1794149609 1495 mCPU 652 MiB
+1794149614 1506 mCPU 302 MiB
+1794149619 1497 mCPU 677 MiB
+1794149624 1499 mCPU 452 MiB
+1794149629 1500 mCPU 667 MiB
+# calib-browser-4 phase=Succeeded reason=Completed
+✓ page 200
+iteration_duration..........: med=2s       p(95)=2.2s     max=2.29s   
+iterations..................: 76     1.224417/s
+browser_web_vital_lcp.......: med=408ms    p(95)=411.2ms  max=412ms   

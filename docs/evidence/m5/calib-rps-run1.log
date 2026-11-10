@@ -1,0 +1,367 @@
+# calib-rps started 1794144404
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'usageNanoCores'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), s["cpu"]["usageNanoCores"]["value"]//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB")
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+# calib-rps ended 1794144782 phase=Failed exit=137 reason=OOMKilled

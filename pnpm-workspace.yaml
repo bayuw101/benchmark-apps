@@ -1,0 +1,10 @@
+packages:
+  - apps/*
+  - packages/*
+  - journeys
+
+# Packages allowed to run install scripts (pnpm blocks them by default).
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - unrs-resolver

@@ -1,0 +1,58 @@
+# M5 measurement target: the mock image on its own, so calibration load never touches mock-target.
+# Approved label (runner egress allows it), more CPU than mock-target so the generator is what saturates.
+# kubectl apply -f docs/evidence/m5/mock-calib.yaml   |   kubectl delete -f docs/evidence/m5/mock-calib.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mock-calib
+  namespace: targets
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mock-calib
+  template:
+    metadata:
+      labels:
+        app: mock-calib
+        btb.io/approved-target: "true"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+        - name: mock-calib
+          image: btb-mock-target:local
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: LATENCY_MS
+              value: "20"
+            - name: SEATS
+              value: "10000000"
+            - name: PAYMENT_RPS
+              value: "100000"
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+          resources:
+            requests:
+              cpu: 200m
+              memory: 128Mi
+            limits:
+              cpu: "2"
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mock-calib
+  namespace: targets
+spec:
+  selector:
+    app: mock-calib
+  ports:
+    - port: 3000
+      targetPort: 3000

@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: perf-staging
+  labels:
+    btb.io/purpose: perf-runner
+    btb.io/environment: staging
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: perf-prod
+  labels:
+    btb.io/purpose: perf-runner
+    btb.io/environment: prod-like
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: targets
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: btb-system

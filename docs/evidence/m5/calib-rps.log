@@ -1,0 +1,76 @@
+# calib-rps started 1794144807
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), int(s["cpu"]["usageNanoCores"]["value"])//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB", flush=True)
+                                ~~~~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'usageNanoCores'
+1794144812 231 mCPU 94 MiB
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), int(s["cpu"]["usageNanoCores"]["value"])//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB", flush=True)
+                                ~^^^^^^^
+KeyError: 'cpu'
+1794144817 221 mCPU 103 MiB
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), int(s["cpu"]["usageNanoCores"]["value"])//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB", flush=True)
+                                ~^^^^^^^
+KeyError: 'cpu'
+1794144823 200 mCPU 107 MiB
+1794144828 252 mCPU 108 MiB
+1794144833 250 mCPU 113 MiB
+1794144838 203 mCPU 107 MiB
+1794144843 219 mCPU 113 MiB
+1794144848 220 mCPU 82 MiB
+1794144853 214 mCPU 92 MiB
+1794144858 216 mCPU 91 MiB
+1794144863 234 mCPU 82 MiB
+1794144869 195 mCPU 84 MiB
+1794144874 235 mCPU 98 MiB
+1794144879 211 mCPU 106 MiB
+1794144884 269 mCPU 103 MiB
+1794144889 252 mCPU 102 MiB
+1794144894 223 mCPU 111 MiB
+1794144899 223 mCPU 111 MiB
+1794144904 281 mCPU 110 MiB
+1794144909 228 mCPU 110 MiB
+1794144914 229 mCPU 115 MiB
+1794144920 250 mCPU 116 MiB
+1794144925 250 mCPU 117 MiB
+1794144930 251 mCPU 125 MiB
+1794144935 254 mCPU 123 MiB
+1794144940 298 mCPU 125 MiB
+1794144945 278 mCPU 123 MiB
+1794144950 265 mCPU 131 MiB
+1794144955 277 mCPU 138 MiB
+1794144960 333 mCPU 135 MiB
+1794144965 268 mCPU 138 MiB
+1794144971 263 mCPU 132 MiB
+1794144976 262 mCPU 133 MiB
+1794144981 284 mCPU 133 MiB
+1794144986 307 mCPU 150 MiB
+1794144991 300 mCPU 147 MiB
+1794144996 361 mCPU 152 MiB
+1794145001 361 mCPU 156 MiB
+1794145006 394 mCPU 160 MiB
+1794145011 310 mCPU 150 MiB
+1794145017 307 mCPU 179 MiB
+1794145022 321 mCPU 161 MiB
+1794145027 307 mCPU 172 MiB
+1794145032 271 mCPU 166 MiB
+1794145037 301 mCPU 172 MiB
+1794145042 293 mCPU 168 MiB
+1794145047 302 mCPU 171 MiB
+1794145052 313 mCPU 190 MiB
+1794145057 358 mCPU 190 MiB
+1794145063 360 mCPU 188 MiB
+1794145068 325 mCPU 201 MiB
+1794145073 386 mCPU 195 MiB
+1794145078 324 mCPU 203 MiB
+1794145083 320 mCPU 192 MiB
+1794145088 348 mCPU 193 MiB
+1794145093 393 mCPU 196 MiB
+1794145098 354 mCPU 213 MiB
+1794145103 307 mCPU 216 MiB
+1794145108 397 mCPU 235 MiB
+# calib-rps ended 1794145113 phase=Succeeded exit=0 reason=Completed

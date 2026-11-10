@@ -1,0 +1,83 @@
+# CI on Bitbucket Pipelines (PRD E0.1, D22). Load tests never run here.
+# - Pull requests: check the packages a change touches plus everything that depends on them; root config
+#   changes check everything.
+# - main: full check, then the web, worker and runner images from the same commit.
+# Still open (TBD-5): the registry (proposed ECR), the pipeline's credentials and the GitOps update, so images
+# are built and labelled but not pushed yet.
+image: node:22
+
+clone:
+  depth: full
+
+definitions:
+  caches:
+    pnpm: .pnpm-store
+  services:
+    docker:
+      memory: 3072
+  steps:
+    - step: &check-all
+        name: Check everything
+        caches: [pnpm]
+        script:
+          - corepack enable
+          - pnpm config set store-dir .pnpm-store
+          - pnpm install --frozen-lockfile
+          - pnpm check
+
+pipelines:
+  pull-requests:
+    "**":
+      - step:
+          name: Check affected packages
+          caches: [pnpm]
+          script:
+            - corepack enable
+            - pnpm config set store-dir .pnpm-store
+            - pnpm install --frozen-lockfile
+            - BASE="origin/${BITBUCKET_PR_DESTINATION_BRANCH}"
+            - git fetch origin "${BITBUCKET_PR_DESTINATION_BRANCH}"
+            - CHANGED="$(git diff --name-only "${BASE}...HEAD")"
+            - |
+              if printf '%s\n' "$CHANGED" | grep -qxE 'package.json|pnpm-lock.yaml|pnpm-workspace.yaml|tsconfig.base.json|bitbucket-pipelines.yml'; then
+                pnpm check
+              else
+                # `!btb`: the root project counts as changed for any file outside a package, and its check runs everything.
+                pnpm --filter "...[${BASE}]" --filter '!btb' --if-present check
+                if printf '%s\n' "$CHANGED" | grep -q '^infra/mock-target/'; then node --test infra/mock-target/server.test.mjs; fi
+              fi
+
+  branches:
+    main:
+      - step: *check-all
+      - step:
+          name: Build images
+          size: 2x
+          services: [docker]
+          caches: [pnpm]
+          script:
+            - export DOCKER_BUILDKIT=1
+            - REV="${BITBUCKET_COMMIT}"
+            - TAG="${BITBUCKET_COMMIT:0:12}"
+            - docker build -f apps/web/Dockerfile --build-arg "BTB_VERSION=${TAG}" --label "org.opencontainers.image.revision=${REV}" -t "btb-web:${TAG}" .
+            - docker build -f apps/worker/Dockerfile --build-arg "BTB_VERSION=${TAG}" --label "org.opencontainers.image.revision=${REV}" -t "btb-worker:${TAG}" .
+            # The runner keeps its content tag (0.1.0-<hash>): scenario versions pin it and the catalog records it.
+            - corepack enable
+            - pnpm config set store-dir .pnpm-store
+            - pnpm install --frozen-lockfile --filter "@btb/journeys..."
+            - pnpm --filter @btb/journeys build
+            - RUNNER_TAG="$(node -p 'require("./journeys/dist/catalog.json").image.tag')"
+            # Same tag = same journeys, but catalog.json's builtAt differs per build: never rebuild or re-push a tag.
+            - |
+              if [ -n "${REGISTRY:-}" ] && docker manifest inspect "${REGISTRY}/btb-runner:${RUNNER_TAG}" >/dev/null 2>&1; then
+                echo "btb-runner:${RUNNER_TAG} is already in ${REGISTRY}; not rebuilt"
+              else
+                docker build --build-arg "TAG=${RUNNER_TAG}" --label "org.opencontainers.image.revision=${REV}" -t "btb-runner:${RUNNER_TAG}" journeys
+              fi
+            - docker image ls --filter "label=org.opencontainers.image.revision=${REV}"
+            # TBD-5: log in to the registry (sets REGISTRY) with short-lived credentials, push the images built above,
+            # load the catalog with the pushed digest (needs the staging DATABASE_URL):
+            #   RUNNER_DIGEST=<digest> pnpm catalog:sync "$BITBUCKET_CLONE_DIR/journeys/dist/catalog.json"
+            # then update the image versions in the GitOps repo.
+          artifacts:
+            - journeys/dist/**

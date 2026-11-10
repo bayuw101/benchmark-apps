@@ -1,0 +1,22 @@
+{
+  "name": "@btb/k6-lib",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "check": "tsc --noEmit && vitest run"
+  },
+  "dependencies": {
+    "@btb/contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/k6": "^1.2.0",
+    "typescript": "^5",
+    "vitest": "^3.2.4"
+  }
+}

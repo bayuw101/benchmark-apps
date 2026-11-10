@@ -1,0 +1,16 @@
+## perf-staging  (2026-11-08T13:12:28Z)
+PASS approved target reachable (HTTP 200)
+PASS unapproved blocked
+PASS external blocked
+exit=0
+## perf-prod  (2026-11-08T13:12:45Z)
+warning: couldn't attach to pod/netpol-probe-approved, falling back to streaming logs: Internal error occurred: Internal error occurred: error attaching to container: container is in CONTAINER_EXITED state
+PASS approved target reachable (HTTP 200200)
+PASS unapproved blocked
+PASS external blocked
+exit=0
+
+## Blocks are network timeouts, not probe errors (2026-11-08T13:13:37Z)
+perf-staging -> unapproved-target: 000 curl_exit=28 (timeout)
+perf-staging -> https://example.com: 000 curl_exit=28 (timeout)
+control, from namespace targets (no runner policy) -> unapproved-target: 200 curl_exit=0

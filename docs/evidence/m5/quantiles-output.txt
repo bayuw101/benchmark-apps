@@ -1,0 +1,48 @@
+$ ./compare_quantiles.py http://172.23.0.2:30090 RUN-0177 1794143451 155 k6-summary-*.json
+| Run | Scope | Stat | k6 summary (ms) | Prometheus (ms) | Diff |
+| --- | --- | --- | --- | --- | --- |
+| RUN-0177 | pod 1 | p50 | 267.8 | 269.0 | 0.44% |
+| RUN-0177 | pod 1 | p95 | 475.6 | 477.8 | 0.47% |
+| RUN-0177 | pod 1 | p99 | 496.6 | 495.8 | 0.16% |
+| RUN-0177 | whole run | p50 | 267.8 | 269.0 | 0.44% |
+| RUN-0177 | whole run | p95 | 475.6 | 477.8 | 0.47% |
+| RUN-0177 | whole run | p99 | 496.6 | 495.8 | 0.16% |
+
+Worst difference: 0.47% (limit 5.0%)
+
+$ ./compare_quantiles.py http://172.23.0.2:30090 RUN-0182 1794144381 940 k6-summary-*.json
+| Run | Scope | Stat | k6 summary (ms) | Prometheus (ms) | Diff |
+| --- | --- | --- | --- | --- | --- |
+| RUN-0182 | pod 1 | p50 | 261.4 | 261.1 | 0.12% |
+| RUN-0182 | pod 1 | p95 | 477.2 | 476.8 | 0.08% |
+| RUN-0182 | pod 1 | p99 | 496.4 | 496.2 | 0.04% |
+| RUN-0182 | pod 2 | p50 | 260.9 | 260.5 | 0.16% |
+| RUN-0182 | pod 2 | p95 | 477.1 | 476.7 | 0.09% |
+| RUN-0182 | pod 2 | p99 | 496.3 | 496.2 | 0.03% |
+
+Worst difference: 0.16% (limit 5.0%)
+
+$ ./compare_quantiles.py http://172.23.0.2:30090 RUN-0167 1794141951 155 k6-summary-*.json
+| Run | Scope | Stat | k6 summary (ms) | Prometheus (ms) | Diff |
+| --- | --- | --- | --- | --- | --- |
+| RUN-0167 | pod 1 | p50 | 20.6 | 20.8 | 0.98% |
+| RUN-0167 | pod 1 | p95 | 21.2 | 22.0 | 3.71% |
+| RUN-0167 | pod 1 | p99 | 21.5 | 22.1 | 2.84% |
+| RUN-0167 | whole run | p50 | 20.6 | 20.8 | 0.98% |
+| RUN-0167 | whole run | p95 | 21.2 | 22.0 | 3.71% |
+| RUN-0167 | whole run | p99 | 21.5 | 22.1 | 2.84% |
+
+Worst difference: 3.71% (limit 5.0%)
+
+$ ./compare_quantiles.py http://172.23.0.2:30090 RUN-0164 1794141490 150 k6-summary-*.json
+| Run | Scope | Stat | k6 summary (ms) | Prometheus (ms) | Diff |
+| --- | --- | --- | --- | --- | --- |
+| RUN-0164 | pod 1 | p50 | 0.6 | 0.6 | 0.02% |
+| RUN-0164 | pod 1 | p95 | 1.1 | 1.1 | 0.38% |
+| RUN-0164 | pod 1 | p99 | 2.0 | 2.0 | 0.59% |
+| RUN-0164 | whole run | p50 | 0.6 | 0.6 | 0.02% |
+| RUN-0164 | whole run | p95 | 1.1 | 1.1 | 0.38% |
+| RUN-0164 | whole run | p99 | 2.0 | 2.0 | 0.59% |
+
+Worst difference: 0.59% (limit 5.0%)
+

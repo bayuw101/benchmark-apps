@@ -1,0 +1,8 @@
+**/node_modules
+**/.next
+**/.next-dev
+**/dist
+**/.env*
+**/*.tsbuildinfo
+.git
+infra/kind/.kube

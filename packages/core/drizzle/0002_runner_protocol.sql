@@ -1,0 +1,1 @@
+ALTER TABLE "runner_images" ADD COLUMN "protocol" integer DEFAULT 1 NOT NULL;

@@ -1,0 +1,91 @@
+# Identity of apps/worker in the cluster. Least privilege: TestRuns and runner pods in the perf-* namespaces only.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: btb-worker
+  namespace: btb-system
+---
+# Long-lived token for the local worker's kubeconfig (worker-kubeconfig.sh). On EKS the worker uses IRSA/Pod Identity instead.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: btb-worker-token
+  namespace: btb-system
+  annotations:
+    kubernetes.io/service-account.name: btb-worker
+type: kubernetes.io/service-account-token
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: btb-worker
+rules:
+  - apiGroups: ["k6.io"]
+    resources: ["testruns"]
+    verbs: ["get", "list", "watch", "create", "delete"]
+  - apiGroups: ["k6.io"]
+    resources: ["testruns/status"]
+    verbs: ["get"]
+  # Runner exit codes (threshold abort = 99) and logs for failed runs.
+  - apiGroups: [""]
+    resources: ["pods", "pods/log"]
+    verbs: ["get", "list"]
+  # Preflight "runner capacity": quota headroom for the runner pods.
+  - apiGroups: [""]
+    resources: ["resourcequotas"]
+    verbs: ["get", "list"]
+---
+# Preflight "target health" (GET <healthPath>) and test-data seed/cleanup hooks (POST/PUT/DELETE) through the
+# API server's service proxy (the worker runs outside the cluster network). Only services in `targets`.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: btb-worker-health
+  namespace: targets
+rules:
+  - apiGroups: [""]
+    resources: ["services/proxy"]
+    verbs: ["get", "create", "update", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: btb-worker-health
+  namespace: targets
+subjects:
+  - kind: ServiceAccount
+    name: btb-worker
+    namespace: btb-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: btb-worker-health
+---
+# Bound per namespace, so the ClusterRole grants nothing outside perf-staging / perf-prod.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: btb-worker
+  namespace: perf-staging
+subjects:
+  - kind: ServiceAccount
+    name: btb-worker
+    namespace: btb-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: btb-worker
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: btb-worker
+  namespace: perf-prod
+subjects:
+  - kind: ServiceAccount
+    name: btb-worker
+    namespace: btb-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: btb-worker

@@ -1,0 +1,174 @@
+# calib-rps started 1794145129
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), int(s["cpu"]["usageNanoCores"]["value"])//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB", flush=True)
+                                ~~~~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'usageNanoCores'
+1794145135 175 mCPU 83 MiB
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), int(s["cpu"]["usageNanoCores"]["value"])//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB", flush=True)
+                                ~^^^^^^^
+KeyError: 'cpu'
+1794145140 205 mCPU 91 MiB
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), int(s["cpu"]["usageNanoCores"]["value"])//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB", flush=True)
+                                ~^^^^^^^
+KeyError: 'cpu'
+1794145145 208 mCPU 74 MiB
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), int(s["cpu"]["usageNanoCores"]["value"])//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB", flush=True)
+                                ~^^^^^^^
+KeyError: 'cpu'
+1794145150 168 mCPU 77 MiB
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), int(s["cpu"]["usageNanoCores"]["value"])//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB", flush=True)
+                                ~^^^^^^^
+KeyError: 'cpu'
+1794145156 156 mCPU 76 MiB
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), int(s["cpu"]["usageNanoCores"]["value"])//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB", flush=True)
+                                ~^^^^^^^
+KeyError: 'cpu'
+1794145161 191 mCPU 77 MiB
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), int(s["cpu"]["usageNanoCores"]["value"])//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB", flush=True)
+                                ~^^^^^^^
+KeyError: 'cpu'
+1794145166 157 mCPU 81 MiB
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), int(s["cpu"]["usageNanoCores"]["value"])//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB", flush=True)
+                                ~^^^^^^^
+KeyError: 'cpu'
+1794145171 170 mCPU 80 MiB
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), int(s["cpu"]["usageNanoCores"]["value"])//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB", flush=True)
+                                ~^^^^^^^
+KeyError: 'cpu'
+1794145176 154 mCPU 77 MiB
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), int(s["cpu"]["usageNanoCores"]["value"])//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB", flush=True)
+                                ~^^^^^^^
+KeyError: 'cpu'
+1794145181 150 mCPU 80 MiB
+1794145187 140 mCPU 81 MiB
+1794145192 154 mCPU 83 MiB
+1794145197 144 mCPU 83 MiB
+1794145202 179 mCPU 83 MiB
+1794145207 184 mCPU 84 MiB
+1794145212 192 mCPU 84 MiB
+1794145217 139 mCPU 84 MiB
+1794145222 171 mCPU 76 MiB
+1794145227 168 mCPU 78 MiB
+1794145232 146 mCPU 85 MiB
+1794145238 147 mCPU 87 MiB
+1794145243 164 mCPU 90 MiB
+1794145248 164 mCPU 95 MiB
+1794145253 143 mCPU 91 MiB
+1794145258 145 mCPU 93 MiB
+1794145263 176 mCPU 94 MiB
+1794145268 169 mCPU 95 MiB
+1794145273 149 mCPU 89 MiB
+1794145278 168 mCPU 88 MiB
+1794145284 192 mCPU 92 MiB
+1794145289 153 mCPU 97 MiB
+1794145294 164 mCPU 97 MiB
+1794145299 174 mCPU 99 MiB
+1794145304 158 mCPU 97 MiB
+1794145309 170 mCPU 109 MiB
+1794145314 161 mCPU 104 MiB
+1794145319 165 mCPU 104 MiB
+1794145324 179 mCPU 104 MiB
+1794145329 149 mCPU 105 MiB
+1794145335 193 mCPU 105 MiB
+1794145340 157 mCPU 105 MiB
+1794145345 256 mCPU 106 MiB
+1794145350 214 mCPU 123 MiB
+1794145355 170 mCPU 108 MiB
+1794145360 200 mCPU 102 MiB
+1794145365 185 mCPU 102 MiB
+1794145370 199 mCPU 109 MiB
+1794145375 246 mCPU 112 MiB
+1794145381 240 mCPU 113 MiB
+1794145386 189 mCPU 113 MiB
+1794145391 204 mCPU 112 MiB
+1794145396 160 mCPU 113 MiB
+1794145401 160 mCPU 113 MiB
+1794145406 184 mCPU 123 MiB
+1794145411 163 mCPU 129 MiB
+1794145416 173 mCPU 129 MiB
+1794145422 204 mCPU 126 MiB
+1794145427 172 mCPU 120 MiB
+1794145432 173 mCPU 120 MiB
+1794145437 226 mCPU 120 MiB
+1794145442 172 mCPU 121 MiB
+1794145447 211 mCPU 120 MiB
+1794145452 202 mCPU 121 MiB
+1794145457 182 mCPU 121 MiB
+1794145462 174 mCPU 121 MiB
+1794145468 206 mCPU 122 MiB
+1794145473 193 mCPU 121 MiB
+1794145478 238 mCPU 138 MiB
+1794145483 181 mCPU 135 MiB
+1794145488 176 mCPU 136 MiB
+1794145493 198 mCPU 135 MiB
+1794145498 197 mCPU 135 MiB
+1794145503 171 mCPU 135 MiB
+1794145508 187 mCPU 135 MiB
+1794145514 214 mCPU 135 MiB
+1794145519 173 mCPU 136 MiB
+1794145524 173 mCPU 135 MiB
+1794145529 202 mCPU 135 MiB
+1794145534 179 mCPU 135 MiB
+1794145539 169 mCPU 135 MiB
+1794145544 176 mCPU 135 MiB
+1794145549 241 mCPU 136 MiB
+1794145555 212 mCPU 135 MiB
+1794145560 180 mCPU 135 MiB
+1794145565 239 mCPU 158 MiB
+1794145570 217 mCPU 157 MiB
+1794145575 207 mCPU 157 MiB
+1794145580 180 mCPU 157 MiB
+1794145585 196 mCPU 158 MiB
+1794145590 197 mCPU 156 MiB
+1794145596 178 mCPU 158 MiB
+1794145601 185 mCPU 157 MiB
+1794145606 195 mCPU 157 MiB
+1794145611 198 mCPU 157 MiB
+1794145616 181 mCPU 157 MiB
+1794145621 177 mCPU 157 MiB
+1794145626 191 mCPU 158 MiB
+1794145631 187 mCPU 157 MiB
+1794145637 183 mCPU 157 MiB
+1794145642 183 mCPU 157 MiB
+1794145647 186 mCPU 153 MiB
+1794145652 170 mCPU 153 MiB
+1794145657 212 mCPU 154 MiB
+1794145662 210 mCPU 153 MiB
+1794145667 215 mCPU 153 MiB
+1794145672 174 mCPU 183 MiB
+1794145678 181 mCPU 177 MiB
+1794145683 193 mCPU 177 MiB
+1794145688 199 mCPU 178 MiB
+1794145693 190 mCPU 170 MiB
+1794145698 181 mCPU 170 MiB
+1794145703 192 mCPU 170 MiB
+1794145708 181 mCPU 170 MiB
+1794145713 188 mCPU 170 MiB
+1794145719 199 mCPU 171 MiB
+1794145724 185 mCPU 169 MiB
+1794145729 183 mCPU 170 MiB
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(int(time.time()), int(s["cpu"]["usageNanoCores"]["value"])//1_000_000, "mCPU", int(s["memory"]["workingSetBytes"]["value"])//2**20, "MiB", flush=True)
+                                ~^^^^^^^
+KeyError: 'cpu'
+# calib-rps ended 1794145739 phase=Succeeded exit=0 reason=Completed

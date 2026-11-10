@@ -1,0 +1,50 @@
+# M5.3 (PRD E0.6): how much load one runner pod can generate. A plain k6 pod with the runner image and exactly the
+# runner pod's resources (apps/worker/src/plan.ts RUNNER_RESOURCES), against mock-calib (docs/evidence/m5/mock-calib.yaml).
+# Metrics go to the cluster Prometheus under testid=CALIB-<mode>; CPU/memory come from crictl on the kind node.
+#   MODE=rps STEPS=...: ramping-arrival-rate, one GET per iteration (finds the request-rate ceiling)
+#   MODE=vus STEPS=...: ramping-vus, GET + sleep(1) per iteration (finds the VU ceiling for think-time journeys)
+#   browser.js (calib-browser.sh): N Chromium VUs opening the mock event page (M5.2, max browser VUs per pod)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: calib-script
+  namespace: perf-staging
+data:
+  calib.js: |
+    import http from "k6/http";
+    import { sleep } from "k6";
+    const T = __ENV.TARGET;
+    const MODE = __ENV.MODE;
+    const steps = __ENV.STEPS.split(",").map(Number);
+    const STEP = Number(__ENV.STEP_SEC || 60);
+    export const options = {
+      summaryTrendStats: ["med", "p(95)", "p(99)", "max"],
+      scenarios: {
+        s: MODE === "rps"
+          ? { executor: "ramping-arrival-rate", startRate: steps[0], timeUnit: "1s", preAllocatedVUs: 200, maxVUs: 3000,
+              stages: steps.flatMap((r) => [{ target: r, duration: "5s" }, { target: r, duration: `${STEP - 5}s` }]) }
+          : { executor: "ramping-vus", startVUs: 0, gracefulRampDown: "0s",
+              stages: steps.flatMap((v) => [{ target: v, duration: "10s" }, { target: v, duration: `${STEP - 10}s` }]) },
+      },
+    };
+    export default function () {
+      http.get(`${T}/events/evt-1`, { tags: { name: "GET /events/:id" } });
+      if (MODE === "vus") sleep(1);
+    }
+  browser.js: |
+    import { browser } from "k6/browser";
+    import { check } from "k6";
+    const T = __ENV.TARGET;
+    export const options = {
+      summaryTrendStats: ["med", "p(95)", "max"],
+      scenarios: { b: { executor: "constant-vus", vus: Number(__ENV.VUS), duration: `${__ENV.STEP_SEC || 60}s`, options: { browser: { type: "chromium" } } } },
+    };
+    export default async function () {
+      const page = await browser.newPage();
+      try {
+        const res = await page.goto(`${T}/events/evt-1/page`, { waitUntil: "load" });
+        check(res, { "page 200": (r) => r && r.status() === 200 });
+      } finally {
+        await page.close();
+      }
+    }

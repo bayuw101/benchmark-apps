@@ -1,0 +1,29 @@
+# Sample run. Script ConfigMap "btb-smoke" is created by up.sh from infra/k6/smoke.js.
+apiVersion: k6.io/v1alpha1
+kind: TestRun
+metadata:
+  name: smoke
+  namespace: perf-staging
+spec:
+  parallelism: 2
+  script:
+    configMap:
+      name: btb-smoke
+      file: smoke.js
+  arguments: --tag testid=kind-smoke -o experimental-prometheus-rw
+  runner:
+    image: grafana/k6:2.3.0
+    env:
+      - name: TARGET_URL
+        value: http://mock-target.targets.svc.cluster.local:3000
+      - name: K6_PROMETHEUS_RW_SERVER_URL
+        value: http://prometheus.monitoring.svc.cluster.local:9090/api/v1/write
+      - name: K6_FEATURES
+        value: native-histograms
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 256Mi

@@ -1,0 +1,46 @@
+{
+  "name": "@btb/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./db": "./src/db/index.ts",
+    "./schema": "./src/db/schema.ts",
+    "./catalog": "./src/catalog.ts",
+    "./dev-accounts": "./src/dev-accounts.ts",
+    "./env": "./src/env.ts",
+    "./audit": "./src/audit.ts",
+    "./policy": "./src/policy.ts",
+    "./approvals": "./src/approvals.ts",
+    "./manifest": "./src/manifest.ts",
+    "./lease": "./src/lease.ts",
+    "./integrity": "./src/integrity.ts",
+    "./first-admin": "./src/first-admin.ts",
+    "./executor": "./src/executor.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "check": "tsc --noEmit && vitest run",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "db:seed": "tsx src/scripts/seed.ts",
+    "db:seed:runs": "tsx src/scripts/seed-runs.ts",
+    "db:first-admin": "tsx src/scripts/first-admin.ts",
+    "catalog:sync": "tsx src/scripts/catalog-sync.ts"
+  },
+  "dependencies": {
+    "@btb/contracts": "workspace:*",
+    "drizzle-orm": "^0.45.4",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/pg": "^8.23.1",
+    "drizzle-kit": "^0.31.11",
+    "tsx": "^4.20.0",
+    "typescript": "^5",
+    "vitest": "^3.2.4"
+  }
+}

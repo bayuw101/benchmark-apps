@@ -1,0 +1,171 @@
+# Local dev stack (BTB-20). Dev only: all ports bind to 127.0.0.1, credentials are throwaway.
+name: btb-dev
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-btb}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-btb-dev-only}
+      POSTGRES_DB: ${POSTGRES_DB:-btb}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-15432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-16379}:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${REDISINSIGHT_PORT:-5540}:5540"
+    volumes:
+      - redisinsight-data:/data
+    restart: unless-stopped
+
+  # Official minio/minio images are no longer pullable from Docker Hub; pgsty/minio is a maintained community build.
+  minio:
+    image: pgsty/minio:RELEASE.2026-08-04T00-00-00Z
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-btb}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-btb-dev-only}
+    ports:
+      - "127.0.0.1:${MINIO_API_PORT:-19000}:9000"
+      - "127.0.0.1:${MINIO_CONSOLE_PORT:-19001}:9001"
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  minio-init:
+    image: pgsty/mc:RELEASE.2026-10-26T00-00-00Z
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-btb}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-btb-dev-only}
+      MINIO_BUCKET: ${MINIO_BUCKET:-btb-artifacts}
+      # PRD E5.7: artifacts are kept 90 days.
+      ARTIFACT_RETENTION_DAYS: ${ARTIFACT_RETENTION_DAYS:-90}
+    entrypoint: ["/bin/sh", "-c"]
+    # `ilm import` replaces the bucket's lifecycle config, so re-running init never stacks duplicate rules.
+    command:
+      - >-
+        mc alias set local http://minio:9000 "$$MINIO_ROOT_USER" "$$MINIO_ROOT_PASSWORD" &&
+        mc mb --ignore-existing "local/$$MINIO_BUCKET" &&
+        echo "{\"Rules\":[{\"ID\":\"artifact-retention\",\"Status\":\"Enabled\",\"Filter\":{\"Prefix\":\"\"},\"Expiration\":{\"Days\":$$ARTIFACT_RETENTION_DAYS}}]}" | mc ilm import "local/$$MINIO_BUCKET" &&
+        mc ilm rule ls "local/$$MINIO_BUCKET"
+    restart: "no"
+
+  mock-target:
+    build: ../mock-target
+    image: btb-mock-target:local
+    environment:
+      LATENCY_MS: ${MOCK_LATENCY_MS:-20}
+      ERROR_RATE: ${MOCK_ERROR_RATE:-0}
+      OVERSELL: ${MOCK_OVERSELL:-false}
+      SEATS: ${MOCK_SEATS:-100}
+    ports:
+      - "127.0.0.1:${MOCK_TARGET_PORT:-8081}:3000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # Grafana OSS with the BTB dashboards (E10.5), reading the kind cluster's Prometheus (joins the `kind` network):
+  #   docker compose -f infra/local/docker-compose.yml --profile grafana up -d grafana   -> http://localhost:3300
+  # The web app links runs here when GRAFANA_URL is set (apps/web/.env.example).
+  grafana:
+    image: grafana/grafana:13.3.0
+    profiles: ["grafana"]
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-btb}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-btb-dev-only}
+      # Dev only: read-only without signing in, so run links open directly. Staging uses Entra SSO (M7.3).
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      PROMETHEUS_URL: ${GRAFANA_PROMETHEUS_URL:-http://btb-control-plane:30090}
+    ports:
+      - "127.0.0.1:${GRAFANA_PORT:-3300}:3000"
+    volumes:
+      - ../grafana/provisioning:/etc/grafana/provisioning:ro
+      - ../grafana/dashboards:/etc/btb/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    networks: [default, kind]
+
+  # apps/worker against the kind cluster (infra/kind/up.sh first). Profile, so the data stack comes up without kind:
+  #   docker compose -f infra/local/docker-compose.yml --profile worker up -d --build worker
+  worker:
+    build:
+      context: ../..
+      dockerfile: apps/worker/Dockerfile
+      args:
+        # Shown on each run it starts, e.g. BTB_VERSION=$(git rev-parse --short=12 HEAD).
+        BTB_VERSION: ${BTB_VERSION:-dev}
+    image: btb-worker:local
+    profiles: ["worker"]
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-btb}:${POSTGRES_PASSWORD:-btb-dev-only}@postgres:5432/${POSTGRES_DB:-btb}
+      REDIS_URL: redis://redis:6379
+      KUBECONFIG: /kube/config
+      # The kind node on the `kind` docker network: API server :6443 (in the kubeconfig), Prometheus NodePort.
+      PROMETHEUS_URL: http://btb-control-plane:30090
+      RUNNER_PROMETHEUS_RW_URL: http://prometheus.monitoring.svc.cluster.local:9090/api/v1/write
+      S3_ENDPOINT: http://minio:9000
+      S3_BUCKET: ${MINIO_BUCKET:-btb-artifacts}
+      S3_ACCESS_KEY_ID: ${MINIO_ROOT_USER:-btb}
+      S3_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD:-btb-dev-only}
+      # Runner lease (E6.1): the web app on the host, through the btb-platform Service (infra/kind/up.sh).
+      RUNNER_LEASE_URL: http://btb-platform.btb-system.svc.cluster.local/api/runner/lease
+      # Must match the web app's (its dev default).
+      LEASE_SECRET: ${LEASE_SECRET:-btb-dev-only-lease-secret}
+    volumes:
+      # infra/kind/worker-kubeconfig.sh; btb-worker ServiceAccount token, server https://btb-control-plane:6443.
+      - ../kind/.kube/worker.yaml:/kube/config:ro
+    networks: [default, kind]
+
+networks:
+  kind:
+    external: true
+
+volumes:
+  postgres-data:
+  redis-data:
+  redisinsight-data:
+  minio-data:
+  grafana-data:

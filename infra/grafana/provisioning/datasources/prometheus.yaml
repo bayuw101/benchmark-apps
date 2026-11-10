@@ -1,0 +1,12 @@
+# The Prometheus that receives k6 remote-write and scrapes runner pods (E10.4). URL from the container env.
+apiVersion: 1
+datasources:
+  - name: Prometheus
+    uid: btb-prometheus
+    type: prometheus
+    access: proxy
+    url: $PROMETHEUS_URL
+    isDefault: true
+    editable: false
+    jsonData:
+      timeInterval: 5s
